@@ -20,7 +20,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '0.93';
+$VERSION = '0.94';
 sub Version { $VERSION; }
 
 
@@ -284,7 +284,7 @@ my %fields = (
 	botprompt	=> '',
 	userprompt	=> '',
 
-	myrand          => sub { rand($_[0]); },
+	myrand          => sub { return rand($_[0]); },
 
 	keyranks	=> undef,
 	decomplist	=> undef,
@@ -852,7 +852,14 @@ script data only has 4 such items.
 		# and make sure that it has something to parse. 
 		# Use a string from memory if anything is available. 
 		#
-		if ($#{ $self->memory } >= 0 and &{$self->{myrand}}() <= $self->likelihood_of_using_memory) {
+		# $self-likelihood_of_using_memory should be some number
+		# between 1 and 0;  it defaults to 1. 
+		#
+		if (
+			$#{ $self->memory } >= 0 
+			and 
+			&{$self->{myrand}}(1) >= 1 - $self->likelihood_of_using_memory
+		) {
 
 			$reasmb =  $self->transform( shift @{ $self->memory }, "use memory" );
 
@@ -868,6 +875,7 @@ script data only has 4 such items.
 		# push it onto the end of the memory stack... unless, of course,
 		# that's where we got it from in the first place, or if the rank
 		# is not the kind we remember.
+		#
 		if (
 				$#{ $self->{reasmblist_for_memory}->{$reasmbkey} } >= 0
 				and
