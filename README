@@ -42,15 +42,25 @@ the doc/ directory.  These are right from the embedded POD.
 
 INSTALLATION:
                                                                       
-To install this module, you need to run:
+Installation is just like any other CPAN module, namely:
 
-perl Makefile.PL
-make
-make test
-make install         
+     perl Makefile.PL
+     make
+     make test
+     make install         
+
 
 
 WHAT'S NEW?         
+
+Versions 0.96 - October 1999
+-------------
+
+One tiny change to the regex which implements
+reassemble rules.  Thanks to Gidon Wise for
+suggesting this improvement. 
+
+(Versions 0.95 and 0.96 differ by just one character.)
 
 
 Versions 0.94 & 0.95 - July 1999
@@ -78,8 +88,9 @@ as perl's built-in rand() function.  That is, it should take
 a single (numeric) expression as a parameter, and it should 
 return a floating-point value between 0 and that number.  
 
-You can also now use an anonymous hash as a parameter to the 
-new() method to define any fields in that bot instance:
+You can also now use a reference to an anonymous hash 
+as a parameter to the new() method to define any fields 
+in that bot instance:
 
         $bot = new Chatbot::Eliza {
                 name       => "Brian",
@@ -124,10 +135,6 @@ $Chatbot::Eliza::memory_on variable to 0, like so:
 	$bot->memory_on(0);
 
 Thanks to Robert Chin for suggesting that. 
-
-
-Still on the to-do list:  make some more substantial
-improvements to the random number generator.  
 
 
 

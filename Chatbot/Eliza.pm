@@ -20,7 +20,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '0.95';
+$VERSION = '0.96';
 sub Version { $VERSION; }
 
 
@@ -797,7 +797,7 @@ sub transform{
 					for ($i=1; $i <= $#decomp_matches; $i++) {
 						$decomp_matches[$i] = $self->postprocess( $decomp_matches[$i] );
 						$decomp_matches[$i] =~ s/([,;?!]|\.*)$//;
-						$reasmb =~ s/\($i\)/$decomp_matches[$i]/;
+						$reasmb =~ s/\($i\)/$decomp_matches[$i]/i;
 					}
 
 					# Move on to the next keyword.  If no other keywords match,
