@@ -7,11 +7,7 @@
 # However, many of the rules do pretty work well, and German offers 
 # opportunities for at least few new ones of its own (e.g., "mir ist *").
 #
-# I'd welcome any comments, criticism, suggestions, complaints
-# from native German speakers.  
-#
-# If anyone wants to really put some time into repairing this, 
-# I'll redistribute it with *you* listed as co-author.
+# Prepared by John Nolan and Matthias Hellmund.
 #
 #
 initial: Freut mich.  Erzähl mir dein Problem! 
@@ -19,7 +15,7 @@ initial: Hallo, ich bin Rechnerprogram.
 initial: Sag mir bitte, was dich stört. 
 initial: Was hast du denn?
 final: Ciao.  War nett mit dir zu reden. Bis dann.
-final: Tschüß!  Hoffentlich has du diese Sitzung hilfreich gefunden.  
+final: Tschüß!  Hoffentlich hast du diese Sitzung hilfreich gefunden.  
 final: Ich glaube, du solltest mit einem ECTHEN Analytiker sprechen. Ciao! 
 final: Das Leben ist schwer.  Bleib am Ball!
 quit: exit
@@ -108,36 +104,36 @@ synon: jeder jederman jedes jede
 synon: sein bin ist sind seid
 key: xnone -1
   decomp: *
-    reasmb: Ich bin nicht sicher, ob ich dir verstanden habe.
+    reasmb: Ich bin nicht sicher, ob ich dich verstanden habe.
     reasmb: Erzähl mir weiter.  
     reasmb: Das ist ja interessant.  Sprich bitte weiter.
     reasmb: Kannst du das nicht etwas erläutern ?
-    reasmb: Stört es dir, daß wir über dieses Thema sprechen ?
+    reasmb: Stört es dich, daß wir über dieses Thema sprechen ?
 key: Leid 0
   decomp: * tut mir Leid *
-    reasmb: Bitte dich nicht entschuldigen!
-    reasmb: Es ist nicht notwendig, sich zu entschüldigen.
-    reasmb: Ich habe dir schon gesagt.  Es ist nicht notwendig, sich zu entschüldigen.
+    reasmb: Bitte entschuldige dich nicht!
+    reasmb: Es ist nicht notwendig, sich zu entschuldigen.
+    reasmb: Ich habe dir schon gesagt, es ist nicht notwendig, sich zu entschuldigen.
     reasmb: Es hat mich nicht gestört.  Sprich bitte weiter.  
-key: entshuldige 0
+key: entschuldige 0
   decomp: *
     reasmb: goto Leid
-key: entshuldigen 0
+key: entschuldigen 0
   decomp: *
     reasmb: goto Leid
 key: erinnere 5
   decomp: * ich erinnere mich an *
     reasmb: Denkst du häufig an (2) ?
-    reasmb: Fallt dir noch etwas ein, wenn du über (2) denkst ?
+    reasmb: Fällt dir noch etwas ein, wenn du an (2) denkst ?
     reasmb: Woran erinnerst du dich noch ?
-    reasmb: Warum erinnerst du dich über (2) jetzt gerade ?
+    reasmb: Warum erinnerst du dich jetzt gerade an (2)?
     reasmb: Was in der jetzigen Situation erinnert dich an (2) ?
     reasmb: Welche Verbindung gibt es zwischen mir und (2) ?
-    reasmb: Woran noch erinnert dich (2) ?
+    reasmb: Woran erinnert dich (2) noch?
 key: erinnerst 5
   decomp: * erinnerst du dich * an *
     reasmb: Meinst du, ich würde (3) vergessen ?
-    reasmb: Warum glaubst du, ich sollte mich über (3) erinnern ?
+    reasmb: Warum glaubst du, ich sollte mich an (3) erinnern ?
     reasmb: Wie ist es mit (3) ?
     reasmb: goto was
     reasm_for_memory: Du hast (3) erwähnt.
@@ -150,17 +146,17 @@ key: vergessen 5
     reasmb: Warum würdest du (2) vergessen ?
     reasmb: Warum kannst du dich nicht an (2) erinnern ?
     reasmb: Wie häufig denkst du an (2) ?
-    reasmb: Stört es dich (2) zu vergessen ?
+    reasmb: Stört es dich, (2) zu vergessen ?
     reasmb: Könnte das eine geistige Sperre sein ? 
-    reasmb: Bist du vergesslich im allgemeinen ?
+    reasmb: Bist du vergeßlich im allgemeinen ?
     reasmb: Glaubst du, du unterdrückst (2) ?
   decomp: * hast du * vergessen *
     reasmb: Warum fragst du das ?
-    reasmb: Bist du sicher, daß du das mir gesagt hast ?
+    reasmb: Bist du sicher, daß du mir das gesagt hast ?
     reasmb: Würde es dich stören, wenn ich (2) vergessen würde ?
     reasmb: Warum soll ich mich jetzt an (2) erinnern ?
     reasmb: goto was
-    reasmb: Sprich mir weiter über (2).
+    reasmb: Sprich weiter über (2).
 key: wenn 3
   decomp: * wenn *
     reasmb: Glaubst du, es ist möglich, daß (2) ?
@@ -168,11 +164,11 @@ key: wenn 3
     reasmb: Was weißt du über (2) ?
     reasmb: Tatsächlich, wenn (2) ?
     reasmb: Was würdest du machen, wenn (2) ?
-    reasmb: Aber wieviele Chancen gibe es, daß (2) ?
+    reasmb: Aber wieviele Chancen gibt es, daß (2) ?
 key: geträumt 4
   decomp: * habe * geträumt, daß *
     reasmb: Wirklich, daß (2) ?
-    reasmb: Hast du schon einmal phatasiert, daß (2), wahrend du wach warst ?
+    reasmb: Hast du schon einmal phantasiert, daß (2), während du wach warst ?
     reasmb: Hast du früher irgendwann geträumt, daß (2) ?
     reasmb: goto Traum
 key: Traum 3
@@ -181,14 +177,14 @@ key: Traum 3
     reasmb: Träumst du oft ?
     reasmb: Welche Leute stellen sich in deinen Träumen vor ? 
     reasmb: Glaubst du, daß Träume etwas mit deinem Problem zu tun haben ?
-key: vielliecht 0
+key: vielleicht 0
   decomp: *
-    reasmb: Du scheinst nicht, völlig sicher zu sein. 
-    reasmb: Warum dieser unbestimme Klang ?
+    reasmb: Du scheinst dir nicht völlig sicher zu sein. 
+    reasmb: Warum dieser unsichere Ton ?
     reasmb: Kannst du nicht positiver sein ?
     reasmb: Du bist nicht sicher ?
     reasmb: Weißt du nicht ?
-    reasmb: Wie wahrscheinlich, schätzest du ?
+    reasmb: Wie wahrscheinlich, meinst du, ist es ?
 key: Namen 15
   decomp: *
     reasmb: goto Name
@@ -225,14 +221,20 @@ key: Computer 50
     reasmb: Warum hast du Computer erwähnt ?
     reasmb: Was haben Maschinen mit deinem Problem zu tun, deiner Meinung nach ?
     reasmb: Glaubst du nicht, daß Computer Leuten helfen können ?
-    reasmb: Was uber Machinen stört dich ?
-    reasmb: Was denkst du über Machinen ? 
+    reasmb: Was stört dich an Maschinen ?
+    reasmb: Was hältst du von Maschinen ? 
     reasmb: Du glaubst nicht, daß ich ein Computerprogramm bin, nicht wahr ?
+key: hi 0
+  decomp: * hi *
+    reasmb: goto hello
+key: hallo 0
+  decomp: * hallo *
+    reasmb: goto hello
 key: bin 0
   decomp: * bin ich *
     reasmb: Glaubst du, du bist (2) ?
     reasmb: Möchtest du (2) sein ?
-    reasmb: Wünschest du, daß ich dir sagen würde, du bist (2) ?
+    reasmb: Möchtest du, daß ich dir sage, du bist (2) ?
     reasmb: Was würde es dir bedeuten, wenn du (2) wärest ?
     reasmb: goto was
   decomp: * ich bin *
@@ -243,8 +245,8 @@ key: bin 0
 key: bist 0
   decomp: * bist du *
     reasmb: Warum interessiert es dich, ob ich (2) bin oder nicht ?
-    reasmb: Hättest du das lieber, wenn ich nicht (2) wäre ?
-    reasmb: Veilleicht bin ich (2) in deinen Fantasien.
+    reasmb: Hättest du es lieber, wenn ich nicht (2) wäre ?
+    reasmb: Vielleicht bin ich (2) in deinen Fantasien.
     reasmb: Glaubst du manchmal, ich bin (2) ?
     reasmb: goto was
     reasmb: Würde das dir etwas ausmachen ?
@@ -253,7 +255,7 @@ key: bist 0
     reasmb: goto du
 key: sind 0
   decomp: * sind *
-    reasmb: Glaubst du, daß sie veilleicht (2) nicht sind ?
+    reasmb: Glaubst du, daß sie vielleicht nicht (2) sind ?
     reasmb: Würdest du dich freuen, wenn sie nicht (2) wären ?
     reasmb: Was ist, wenn sie nicht (2) wären ?
     reasmb: Sind sie immer (2) ?
@@ -288,27 +290,28 @@ key: war 2
     reasmb: Warum sagst du mir jetzt, daß du (2) warst ?
     reasmb: Vielleicht weiß ich schon, daß du (2) warst.
 key: warst 2
+  decomp: * warst du nicht *
+    reasmb: Vielleicht war ich doch (2).
   decomp: * warst du *
-    reasmb: Möchtest du glauben, Cich (2) war?
+    reasmb: Möchtest du glauben, daß ich (2) war?
     reasmb: Was deutet darauf hin, daß ich (2) war ?
     reasmb: Was glaubst du daran ?
-    reasmb: Vielleicht war ich (2).
     reasmb: Was ist, wenn ich (2) gewesen wäre ?
 key: mir 0
   decomp: * mir ist *
     reasmb: Warum ist dir (2) ?
-    reasmb: Ist es deshalb, daß du (2) bist, daß du zu mir gekommen bist?
+    reasmb: Bist du zu mir gekommen, weil dir (2) ist ?
 key: ich 0
   decomp: * ich @moechte *
-    reasmb: Was würde es dir bedeuten, wenn du diesen Wünsch realisieren würdest ?
+    reasmb: Was würde es dir bedeuten, wenn du diesen Wunsch realisieren würdest ?
     reasmb: Warum willst du das ?
-    reasmb: Stell dir mal vor, du kriegst deisen Wünsch bald.
-    reasmb: Was ist, wenn dieser Wünsch sich nie realisiert ?
+    reasmb: Stell dir mal vor, dein Wunsch wird bald Wirklichkeit.
+    reasmb: Was ist, wenn dieser Wunsch sich nie realisieren läßt ?
     reasmb: Was hat dieser Wunsch mit unserem Gespräch zu tun ?
   decomp: * ich bin * @traurig *
     reasmb: Es tut mir Leid zu hören, daß du (3) bist.
     reasmb: Glaubst du, hierhin zu kommen wird dir helfen, nicht (3) zu sein ?
-    reasmb: Es ist bestimmt nich angenehm, (3) zu sein.
+    reasmb: Es ist bestimmt nicht angenehm, (3) zu sein.
     reasmb: Kannst du erzählen, was dich (3) gemacht hat ?
   decomp: * ich bin * @gluecklich *
     reasmb: Inwiefern habe ich dir geholfen, (3) zu sein ?
@@ -324,27 +327,27 @@ key: ich 0
   decomp: * ich* @glaube * du *
     reasmb: goto du
   decomp: * ich bin *
-    reasmb: Ist es deswegen, daß du (2) bist, daß du zu mir gekommen bist ?
-    reasmb: Seit wann bist do so  ?
+    reasmb: Bist du zu mir gekommen, weil du (2) bist ?
+    reasmb: Seit wann bist du so  ?
     reasmb: Glaubst du, es ist normal, (2) zu sein ?
     reasmb: Macht es dir Spaß, (2) zu sein ?
     reasmb: Kennst du noch jemanden, der (2) ist ?
   decomp: * ich kann * nicht *
     reasmb: Woher weißt du, daß du (2) nicht (3) kannst ?
-    reasmb: Hast du versucht ?
-    reasmb: Viellicht könnst du jetzt (3).
+    reasmb: Hast du es schon versucht ?
+    reasmb: Vielleicht kannst du jetzt (3).
     reasmb: Willst du wirklich (2) (3) können ?
     reasmb: Was ist, wenn du (2) (3) könntest ?
   decomp: * ich fühle mich *
     reasmb: Sprich weiter über diese Gefühle.
     reasmb: Wie häufig fühlst du dich (2) ?
     reasmb: Fühlst du dich (2) gerne ?
-    reasmb: An welchen Gefühl erinnert dich dieses (2) fühlen ?
+    reasmb: An welches Gefühl erinnert dich dieses (2) fühlen ?
   decomp: *
     reasmb: (1) ?
     reasmb: Warum sagst du, (1) ?
     reasmb: Kannst du das nicht etwas erläutern ?
-    reasmb: Sagst du das aus irgendwelchm speziellen Grund ?
+    reasmb: Sagst du das aus irgendeinem speziellen Grund ?
     reasmb: Das ist ja interessant.
     reasmb: Aha. 
 key: du 0
@@ -353,13 +356,13 @@ key: du 0
   decomp: * du bist *
     reasmb: Warum glaubst du, daß ich (2) bin ?
     reasmb: Gefällt es dir zu glauben, ich bin (2) ?
-    reasmb: Wunschest du manchmal, daß du (2) wärest ?
-    reasmb: Vielleich möchtest du (2) sein.
+    reasmb: Träumst du manchmal, daß du (2) bist ?
+    reasmb: Vielleicht möchtest du (2) sein.
   decomp: * du *
-    reasmb: Wir besprechen dich, nicht mich.
+    reasmb: Wir reden über dich, nicht über mich.
     reasmb: Wirklich, ich (2) ?
     reasmb: Du sprichst nicht über mich in Wirklichkeit, nicht wahr  ?
-    reasmb: Welche Gefühle has du jetzt ?
+    reasmb: Welche Gefühle hast du jetzt ?
 key: ja 0
   decomp: *
     reasmb: Erzähl mir bitte mehr!
@@ -369,7 +372,7 @@ key: ja 0
 key: nein 0
   decomp: *
     reasmb: Sagst du nein, nur um negativ zu sein ?
-    reasmb: Macht das dich unglücklich ? 
+    reasmb: Macht dich das unglücklich ? 
     reasmb: Warum nicht ?
     reasmb: Wieso "nein" ?
 key: meine 2
@@ -382,7 +385,7 @@ key: meine 2
   decomp: * meine *
     reasmb: Deine (2) ?
     reasmb: Warum sagst du, deine (2) ?
-    reasmb: Deutet das noch an etwas hin, das dir gehört ?
+    reasmb: Deutet das noch auf etwas hin, das dir gehört ?
     reasmb: Ist das dir wichtig -- deine (2) ?
     reasm_for_memory: Besprechen wir weiter warum deine  (2).
     reasm_for_memory: Früher hast du deine (2) erwähnt.
@@ -396,7 +399,7 @@ key: mein 2
   decomp: * mein *
     reasmb: Dein (2) ?
     reasmb: Warum sagst du, dein (2) ?
-    reasmb: Deutet das noch an etwas hin, das dir gehört ?
+    reasmb: Deutet das noch auf etwas hin, das dir gehört ?
     reasmb: Ist das dir wichtig -- dein (2) ?
     reasm_for_memory: Besprechen wir weiter warum dein (2).
     reasm_for_memory: Früher hast du dein (2) erwähnt.
@@ -405,7 +408,7 @@ key: kannst 0
   decomp: * kannst du *
     reasmb: Du glaubst, daß ich (2) kann, nicht wahr ?
     reasmb: goto was
-    reasmb: Du willst, daß ich (2) kann.
+    reasmb: Du willst, daß ich (2) kann ?
     reasmb: Vielleicht möchtest du selber (2).
 key: kann 0
   decomp: * kann ich *
@@ -439,7 +442,7 @@ key: wie 0
 key: denn 0
   decomp: *
     reasmb: Ist das der echte Grund ?
-    reasmb: Fallen dir keine andere Gründe ein ?
+    reasmb: Fallen dir keine anderen Gründe ein ?
     reasmb: Erklärt dieser Grund etwas anderes ?
     reasmb: Welche andere Gründe könnte es noch geben ?
 key: warum 0
@@ -462,38 +465,38 @@ key: jeder 2
     reasmb: Bestimmt nicht (2).
     reasmb: Kannst du an jemanden besonderen denken ?
     reasmb: Wer, zum Beispiel?
-    reasmb: Denkst du an eine ganz specielle Person ?
+    reasmb: Denkst du an eine ganz spezielle Person ?
     reasmb: Wer, wenn ich fragen darf ?
-    reasmb: Vielleicht jemand speziell ?
+    reasmb: Vielleicht jemand spezielles ?
     reasmb: Du denkst an eine bestimmte Person, nicht wahr ?
     reasmb: Über wen sprichst du, deiner Meinung nach?
 key: niemand 2
   decomp: * niemand *
     reasmb: Bist du sicher, daß niemand (2) ?
     reasmb: Nein, bestimmt niemand (2) .
-    reasmb: Kannst du an irgenjemanden denken ?
-    reasmb: Denkst du an eine genz specielle Person ?
+    reasmb: Kannst du an irgendjemanden denken ?
+    reasmb: Denkst du an eine ganz spezielle Person ?
     reasmb: Wer, wenn ich fragen darf ?
     reasmb: Eigentlich denkst du an eine bestimmte Person, nicht wahr ?
-    reasmb: Über wen denkst du wirklich ?
+    reasmb: An wen denkst du wirklich ?
 key: immer 1
   decomp: *
     reasmb: Kannst du ein Beispiel nennen ?
     reasmb: Wann ?
     reasmb: An welchen Vorfall denkst du ?
-    reasmb: Wirklich, immer ?
+    reasmb: Wirklich immer ?
 key: ähnlich 10
   decomp: *
     reasmb: Inwiefern ?
     reasmb: Welche Ähnlichkeit siehst du ?
     reasmb: Worauf deutet diese Ähnlichkeit hin ?
     reasmb: Welche Ähnlichkeit siehst du noch ?
-    reasmb: Welche Verbindung gibt es, meinst du ?
+    reasmb: Welche Verbindung, meinst du, gibt es?
     reasmb: Könnte es wirklich irgendwelche Verbindung geben ?
 key: anders 0
   decomp: *
     reasmb: Inwiefern ist es anders ?
-    reasmb: Welchen Unterscheid siehst du ?
+    reasmb: Welchen Unterschied siehst du ?
     reasmb: Worauf deutet dieser Unterschied hin ?
     reasmb: Welche Unterscheidung siehst du noch ?
     reasmb: Was bedeutet diese Ungleichheit ?

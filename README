@@ -1,4 +1,4 @@
-README file for Chatbot::Eliza version 0.40
+README file for Chatbot::Eliza version 0.91
 
 This module implements the classic Eliza algorithm. The original Eliza
 program was written by Joseph Weizenbaum and described in the
@@ -52,6 +52,44 @@ make install
 
 WHAT'S NEW?         
 
+
+Version 0.91 - April 1999
+------------
+
+Fixed a misspelling (oops). 
+
+
+Version 0.90 - April 1999
+------------
+
+Fixed a bug in the way individual bot objects store 
+their memory.  Thanks to Randal Schwartz and to 
+Robert Chin for pointing this out.
+
+Fixed a very stupid error in the way the random
+function is invoked.  Thanks to Antony Quintal
+for pointing out the error. 
+
+Many corrections and improvements were made 
+to the German script by Mattias Hellmund.  
+Thanks, Matthias!
+
+Made a minor syntactical change, at the suggestion
+of Roy Stephan.
+
+The memory functionality can now be disabled by setting the
+$Chatbot::Eliza::memory_on variable to 0, like so:
+
+	$bot->memory_on(0);
+
+Thanks to Robert Chin for suggesting that. 
+
+
+Still on the to-do list:  make some more substantial
+improvements to the random number generator.  
+
+
+
 Version 0.40 - July 1998
 ------------
 
@@ -59,8 +97,7 @@ Re-implemented the memory functionality.   (Hope it's working!)
 
 Cleaned up and expanded the embedded POD documentation.  
 
-Added a sample script in German.  (Ich freue mich auf
-die Kritik deutsch-sprachiger Perlmongers!)
+Added a sample script in German.  
 
 Modified the debugging behavior.  The transform() method itself 
 will no longer print any debugging output directly to STDOUT.  
@@ -72,12 +109,12 @@ is still available to any calling program.
 
 Added a few more example scripts which use the module.  
 
-  simple.pl    - simple script using Eliza.pm
+  simple       - simple script using Eliza.pm
   simple.cgi   - simple CGI script using Eliza.pm
   debug.cgi    - CGI script which displays debugging output
-  deutsch.pl   - script using the German script
+  deutsch      - script using the German script
   deutsch.cgi  - CGI script using the German script
-  twobots.pl   - script which creates two distinct bots
+  twobots      - script which creates two distinct bots
 
 
 Version 0.32 - December 1997
@@ -107,4 +144,4 @@ I'm curious to hear any comments or criticism,
 or ways to improve this module in future versions.
 
 
---John Nolan, jnolan@n2k.com           
+--John Nolan, jpnolan@op.net           

@@ -4,7 +4,7 @@
 # in a cgi program.  It uses the CGI.pm module 
 # written by Lincoln Stein.
 # 
-# It makes use of a German-language "German" script.
+# It makes use of a German-language "Doctor" script.
 #
 # It also prints out the debugging output available
 # in the Eliza chatbot module.

@@ -6,11 +6,11 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..1\n"; }
-END {print "not ok 1\n" unless $loaded;}
+BEGIN { $| = 1; print "\nAttempting to load module..."; }
+END {print "\n\nTest failed, could not load module.\n\n" unless $loaded;}
 use Chatbot::Eliza;
 $loaded = 1;
-print "ok 1\n";
+print "done.  \n\nOK, looks good.\n\n";
 
 ######################### End of black magic.
 

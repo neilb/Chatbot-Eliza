@@ -107,7 +107,7 @@ The current version of Chatbot::Eliza.pm is available on CPAN:
 
 <P>
 
-<PRE>  <A HREF="http://www.perl.com/CPAN-local/modules/by-module/Chatbot/">http://www.perl.com/CPAN-local/modules/by-module/Chatbot/</A>
+<PRE>  <A HREF="http://www.perl.com/CPAN/modules/by-module/Chatbot/">http://www.perl.com/CPAN/modules/by-module/Chatbot/</A>
 </PRE>
 
 <P>
@@ -117,8 +117,8 @@ The current version of Chatbot::Eliza.pm is available on CPAN:
 <H1><A NAME="INSTALLATION">INSTALLATION
 
 </A></H1>
-To install this package, just change to the directory in which you created
-by untarring the package and type the following:
+To install this package, just change to the directory which you created by
+untarring the package, and type the following:
 
 
 <P>
@@ -706,6 +706,24 @@ not too far from Weizenbaum's.
 
 <P>
 
+If you don't want to use the memory functionality at all, then you can
+disable it:
+
+
+<P>
+
+<PRE>        $mybot-&gt;memory_on(0);
+</PRE>
+
+<P>
+
+You can also achieve the same effect by making sure that the script data
+does not contain any reassembly rules marked with the keyword
+``reasm_for_memory''. The default script data only has 4 such items. 
+
+
+<P>
+
 <P>
 <HR>
 <H2><A NAME="parse_script_data_">parse_script_data()
@@ -866,7 +884,7 @@ Six other arrays are created: <CODE>%reasm_for_memory, %pre, %post,
 <H1><A NAME="AUTHOR">AUTHOR
 
 </A></H1>
-John Nolan <A HREF="MAILTO:jnolan@n2k.com">jnolan@n2k.com</A> July 1998.  
+John Nolan <A HREF="MAILTO:jpnolan@op.net">jpnolan@op.net</A> April 1999.  
 
 
 <P>

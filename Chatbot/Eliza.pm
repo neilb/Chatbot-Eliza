@@ -2,7 +2,7 @@
 
 package Chatbot::Eliza;
  
-# Copyright (c) 1997-1998 John Nolan. All rights reserved. 
+# Copyright (c) 1997-1999 John Nolan. All rights reserved. 
 # This program is free software.  You may modify and/or 
 # distribute it under the same terms as Perl itself.  
 # This copyright notice must remain attached to the file.  
@@ -20,7 +20,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '0.40';
+$VERSION = '0.91';
 sub Version { $VERSION; }
 
 
@@ -60,13 +60,13 @@ the functionality easy to incorporate in larger programs.
 
 The current version of Chatbot::Eliza.pm is available on CPAN:
 
-  http://www.perl.com/CPAN-local/modules/by-module/Chatbot/
+  http://www.perl.com/CPAN/modules/by-module/Chatbot/
 
 
 =head1 INSTALLATION
 
-To install this package, just change to the directory in
-which you created by untarring the package and type the following:
+To install this package, just change to the directory which 
+you created by untarring the package, and type the following:
 
 	perl Makefile.PL
 	make test
@@ -246,6 +246,7 @@ my %fields = (
 	debug_text	=> '',
 	transform_text	=> '',
 	prompts_on	=> 1,
+	memory_on   => 1,
 	botprompt	=> '',
 	userprompt	=> '',
 
@@ -263,7 +264,7 @@ my %fields = (
 
 	max_memory_size			=> 5,
 	likelihood_of_using_memory	=> 1,
-	memory				=> [], 
+	memory				=> undef,
 );
 
 
@@ -310,6 +311,12 @@ sub _initialize {
 	my ($self,$name,$scriptfile) = @_;
 	$self->name($name) if $name;
 	$self->parse_script_data($scriptfile);
+
+	# Initialize the memory array ref at instantiation time,
+	# rather than at class definition time. 
+	# (Thanks to Randal Schwartz and Robert Chin for fixing this bug.) 
+	#
+	$self->{memory} = [];
 }
 
 sub AUTOLOAD {
@@ -374,7 +381,7 @@ sub command_interface {
 	print $self->botprompt if $self->prompts_on;
 
 	# Print an initial greeting
-	print "$self->{initial}->[ int rand $#{ $self->{initial} } ]\n";
+	print "$self->{initial}->[ int rand scalar @{ $self->{initial} } ]\n";
 
 
 	###################################################################
@@ -392,7 +399,7 @@ sub command_interface {
 		# If the user wants to quit,
 		# print out a farewell and quit.
 		if ($self->_testquit($user_input) ) {
-			$reply = "$self->{final}->[ int rand $#{ $self->{final} } ]";
+			$reply = "$self->{final}->[ int rand scalar @{ $self->{final} } ]";
 			print $self->botprompt if $self->prompts_on;
 			print "$reply\n";
 			last;
@@ -559,7 +566,14 @@ sub _debug_memory {
 	my $string = "\t";           
 	$string .= $#{ $self->memory } + 1;
 	$string .= " item(s) in memory stack:\n";
-	foreach my $line (@{ $self->memory } ) { $string .= sprintf "\t\t->$line\n" };
+
+	# [Thanks to Roy Stephan for helping me adjust this bit]
+	#
+	foreach (@{ $self->memory } ) { 
+
+		my $line = $_; 
+		$string .= sprintf "\t\t->$line\n" ;
+	};
 
 	return $string;
 }
@@ -714,7 +728,7 @@ sub transform{
 					}
 
 					# Pick out a reassembly rule at random. 
-					$reasmb = $these_reasmbs[ int rand $#these_reasmbs ];
+					$reasmb = $these_reasmbs[ int rand scalar @these_reasmbs ];
 
 					$self->debug_text($self->debug_text . sprintf "\t\t-->  $reasmb\n");
 
@@ -771,6 +785,17 @@ Honestly, I am not sure exactly how this memory functionality
 was implemented in the original Eliza program.  Hopefully
 this implementation is not too far from Weizenbaum's. 
 
+If you don't want to use the memory functionality at all,
+then you can disable it:
+
+	$mybot->memory_on(0);
+
+You can also achieve the same effect by making sure
+that the script data does not contain any reassembly rules 
+marked with the keyword "reasm_for_memory".  The default
+script data only has 4 such items. 
+
+
 =cut
 
 	if ($reasmb eq "") {
@@ -787,15 +812,22 @@ this implementation is not too far from Weizenbaum's.
 			$reasmb =  $self->transform("xnone");
 		}
 
-	} else {
+	} elsif ($self->memory_on) {   
+
+		# If memory is switched on, then we handle memory. 
 
 		# Now that we have successfully transformed this string, 
 		# push it onto the end of the memory stack... unless, of course,
 		# that's where we got it from in the first place, or if the rank
 		# is not the kind we remember.
-		push  @{ $self->memory },$string 
-			if ($#{ $self->{reasmblist_for_memory}->{$reasmbkey} } >= 0
-				and not defined $use_memory);
+		if (
+				$#{ $self->{reasmblist_for_memory}->{$reasmbkey} } >= 0
+				and
+				not defined $use_memory
+		) {
+
+			push  @{ $self->memory },$string ;
+		}
 
 		# Shift out the least-recent item from the bottom 
 		# of the memory stack if the stack exceeds the max size. 
@@ -1031,7 +1063,7 @@ sub parse_script_data {
 
 =head1 AUTHOR
 
-John Nolan  jnolan@n2k.com  July 1998.  
+John Nolan  jpnolan@op.net  April 1999.  
 
 Implements the classic Eliza algorithm by Prof. Joseph Weizenbaum. 
 Script format devised by Charles Hayden. 
