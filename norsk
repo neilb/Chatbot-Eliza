@@ -8,7 +8,7 @@ use Chatbot::Eliza;
 # seed the random number generator
 srand( time ^ ($$ + ($$ << 15)) );    
 
-$chatbot = new Chatbot::Eliza "Mats", "deutsch.txt";
-$chatbot->debug(1);
+$chatbot = new Chatbot::Eliza "Mats", "norsk.txt";
+##$chatbot->debug(1);
 $chatbot->command_interface();
 

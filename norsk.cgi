@@ -14,7 +14,7 @@
 # your Web server before you can try to run this script.  
 # CGI.pm is not included with Eliza.pm.  
 #
-# The German-language script must also be available 
+# The Norwegian-language script must also be available 
 # to this script. 
 # 
 # Information about CGI.pm is here:  
@@ -31,7 +31,7 @@ srand( time ^ ($$ + ($$ << 15)) );    # seed the random number generator
 print $cgi->header;
 print $cgi->start_html;
 print $cgi->start_multipart_form;
-print $cgi->h2('Eliza Sitzung');
+print $cgi->h2('Eliza-økt');
 
 # These lines contain the "Eliza" functionality.
 # User comments are passed through the module's transform

@@ -1,9 +1,17 @@
-# Translated to Norwegian by Mats Stafseng Einarsen <mats@einarsen.no>
+#####################################################################
 #
-# Erstatt de engelske reglene i Chatbot::Eliza med dette
+# 21th january 2003
+#
+# This is a translation of Eliza to Norwegian. It is meant to be as 
+# true to the original script by Weizenbaum as possible, and to a 
+# certain level it proved to be surprisingly easy to apply the 
+# original rules to Norwegian. Some oddities may occur, but the 
+# logic in Eliza's syntax parsing seems to work out quite 
+# similarly for English and Norwegian.
+#
+# Translation by Mats Stafseng Einarsen <mats@einarsen.no>
 #
 
-__DATA__
 initial: Hei! Hvordan har du det?
 initial: Hei, jeg er Lisa.
 initial: Hei, er det noe som plager deg?

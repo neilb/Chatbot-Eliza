@@ -9,6 +9,6 @@ use Chatbot::Eliza;
 srand( time ^ ($$ + ($$ << 15)) );    
 
 $chatbot = new Chatbot::Eliza "Hans", "deutsch.txt";
-$chatbot->debug(1);
+##$chatbot->debug(1);
 $chatbot->command_interface();
 

@@ -20,7 +20,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '1.02';
+$VERSION = '1.04';
 sub Version { $VERSION; }
 
 
@@ -1133,7 +1133,7 @@ sub DESTROY {}
 
 =over 4
 
-=item * Version 1.02 - January 2003
+=item * Version 1.02-1.04 - January 2003
 
   Added a Norwegian script, kindly contributed by 
   Mats Stafseng Einarsen.  Thanks Mats!
