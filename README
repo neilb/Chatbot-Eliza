@@ -1,4 +1,4 @@
-README file for Chatbot::Eliza version 0.95
+README file for Chatbot::Eliza version 0.97
 
 This module implements the classic Eliza algorithm. The original Eliza
 program was written by Joseph Weizenbaum and described in the
@@ -53,14 +53,12 @@ Installation is just like any other CPAN module, namely:
 
 WHAT'S NEW?         
 
-Versions 0.96 - October 1999
--------------
+Versions 0.96 & 0.97 - October 1999
+--------------------
 
 One tiny change to the regex which implements
 reassemble rules.  Thanks to Gidon Wise for
 suggesting this improvement. 
-
-(Versions 0.95 and 0.96 differ by just one character.)
 
 
 Versions 0.94 & 0.95 - July 1999
