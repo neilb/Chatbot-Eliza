@@ -1,0 +1,68 @@
+README file for Chatbot::Eliza version 0.31
+
+This module implements the classic Eliza algorithm. The original Eliza
+program was written by Joseph Weizenbaum and described in the
+Communications of the ACM in 1967. Eliza is a mock Rogerian
+psychotherapist. It prompts for user input, and uses a simple
+transformation algorithm to change user input into a follow-up question.
+The program is designed to give the appearance of understanding.
+
+This program is a faithful implementation of the program described by
+Weizenbaum. It uses a simplified script language (devised by Charles
+Hayden). The content of the script is the same as Weizenbaum's.
+
+This module encapsulates the Eliza algorithm in the form of an object.
+This makes the functionality easy to include in larger programs,
+including CGI scripts for the World Wide Web. 
+
+USAGE:
+
+This is all you need to do to launch a simple Eliza session:
+
+    use Chatbot::Eliza;
+
+    $mybot = new Chatbot::Eliza;
+    $mybot->command_interface;
+
+When creating an Eliza object, you can specify a name and an
+alternative scriptfile:
+
+    $bot = new Chatbot::Eliza "Brian", "myscript.txt";
+
+You can use any of the internal functions in a calling program.
+The code below takes an arbitrary string and retrieves the reply
+from the Eliza object:
+
+     my $string = "I have too many problems.";
+     my $reply  = $mybot->transform( $string );
+
+Complete usage notes are in the HTML and text documentation in 
+the doc/ directory.  These are right from the embedded POD. 
+
+
+INSTALLATION:
+                                                                      
+To install this module, you need to run:
+
+perl Makefile.PL
+make
+make test
+make install         
+
+
+WHAT'S NEW?         
+
+Version 0.31
+------------
+
+The module is now installable, just like any other self-respecting
+CPAN module.  
+
+Version 0.30
+------------
+
+This is the first module I've ever submitted to CPAN.
+I'm curious to hear any comments or criticism,
+or ways to improve this module in future versions.
+
+--John Nolan, jnolan@n2k.com, Novermber 1997.           
