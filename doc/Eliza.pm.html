@@ -1,306 +1,883 @@
-<!-- $Id$ -->
-<HTML><HEAD>
-<CENTER><TITLE>Eliza.pm</TITLE>
-</HEAD>
-<BODY></CENTER><p><hr>
+    <HTML> 
+	<HEAD> 
+	    <TITLE>B<Chatbot::Eliza> - A clone of the classic Eliza program
 
-<H1> 
-<A NAME="Eliza.pm_name_0">
-NAME</A>
-</H1>
+</TITLE> 
+	</HEAD>
+
+	<BODY>
+
+<!-- INDEX BEGIN -->
+
+<UL>
+
+	<LI><A HREF="#NAME">NAME</A>
+	<LI><A HREF="#SYNOPSIS">SYNOPSIS</A>
+	<LI><A HREF="#DESCRIPTION">DESCRIPTION</A>
+	<LI><A HREF="#INSTALLATION">INSTALLATION</A>
+	<LI><A HREF="#USAGE">USAGE</A>
+	<LI><A HREF="#MAIN_DATA_MEMBERS">MAIN DATA MEMBERS</A>
+	<UL>
+
+		<LI><A HREF="#_decomplist">%decomplist </A>
+		<LI><A HREF="#_reasmblist">%reasmblist </A>
+		<LI><A HREF="#_reasmblist_for_memory">%reasmblist_for_memory</A>
+		<LI><A HREF="#_memory">@memory</A>
+		<LI><A HREF="#_keyranks">%keyranks</A>
+		<LI><A HREF="#_quit">@quit</A>
+		<LI><A HREF="#_initial">@initial</A>
+		<LI><A HREF="#_final">@final</A>
+		<LI><A HREF="#_pre">%pre</A>
+		<LI><A HREF="#_post">%post</A>
+		<LI><A HREF="#_synon">%synon</A>
+		<LI><A HREF="#Other_data_members">Other data members</A>
+	</UL>
+
+	<LI><A HREF="#METHODS">METHODS</A>
+	<UL>
+
+		<LI><A HREF="#new_">new()</A>
+		<LI><A HREF="#command_interface_">command_interface()</A>
+		<LI><A HREF="#preprocess_">preprocess()</A>
+		<LI><A HREF="#postprocess_">postprocess()</A>
+		<LI><A HREF="#_testquit_">_testquit()</A>
+		<LI><A HREF="#_debug_memory_">_debug_memory()</A>
+		<LI><A HREF="#transform_">transform()</A>
+		<LI><A HREF="#How_memory_is_used">How memory is used</A>
+		<LI><A HREF="#parse_script_data_">parse_script_data()</A>
+	</UL>
+
+	<LI><A HREF="#Format_of_the_script_file">Format of the script file</A>
+	<LI><A HREF="#How_the_script_file_is_parsed">How the script file is parsed</A>
+	<LI><A HREF="#AUTHOR">AUTHOR</A>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<H1><A NAME="NAME">NAME
+
+</A></H1>
 <STRONG>Chatbot::Eliza</STRONG> - A clone of the classic Eliza program
-<p><p><hr>
 
-<H1> 
-<A NAME="Eliza.pm_synopsis_0">
-SYNOPSIS</A>
-</H1>
-use Chatbot::Eliza;
-<p><p><hr>
 
-<H1> 
-<A NAME="Eliza.pm_description_0">
-DESCRIPTION</A>
-</H1>
-This module implements the classic Eliza algorithm. 
-The original Eliza program was written by Joseph 
-Weizenbaum and described in the Communications 
-of the ACM in 1967.  Eliza is a mock Rogerian 
-psychotherapist.  It prompts for user input, 
-and uses a simple transformation algorithm
-to change user input into a follow-up question.  
-The program is desigend to give the appearance 
-of understanding.  
-<p>This program is a faithful implementation of the program 
-described by Weizenbaum.  It uses a simplified script 
-language (devised by Charles Hayden).  The content 
-of the script is the same as Weizenbaum's. 
-<p>This module encapsulates the Eliza algorithm 
-in the form of an object.  This should make 
-the functionality easy to use in larger programs.  
-<p><p><hr>
+<P>
 
-<H1> 
-<A NAME="Eliza.pm_usage_0">
-USAGE</A>
-</H1>
-This is all you need to do to launch a simple
-Eliza session:
-<p>
-<XMP>
-        use Chatbot::Eliza;
-        $mybot = new Chatbot::Eliza;
-        $mybot->command_interface;
+<P>
+<HR>
+<H1><A NAME="SYNOPSIS">SYNOPSIS
 
-</XMP>
-<p>You can also customize certain features of the 
-session:
-<p>
-<XMP>
-        $myotherbot = new Chatbot::Eliza;
-        $myotherbot->name( "Hortense" );
-        $myotherbot->debug( 1 );
-        $myotherbot->command_interface;
-
-</XMP>
-<p>These lines set the name of the bot to be
-``Hortense'' and turn on the debugging output.
-<p>When creating an Eliza object, you can specify
-a name and an alternative scriptfile:
-<p>
-<XMP>
-        $bot = new Chatbot::Eliza "Brian", "myscript.txt";
-
-</XMP>
-<p>If you don't specify a script file, then the
-Eliza module will initialize the new Eliza
-object with a default script that the module
-contains within itself. 
-<p>You can use any of the internal functions in
-a calling program.  The code below takes an 
-arbitrary string and retrieves the reply from 
-the Eliza object:
-<p>
-<XMP>
-        my $string = "I have too many problems.";
-        my $reply  = $mybot->transform( $string );
-
-</XMP>
-<p>You can easily create two bots, each with a different
-script, and see how they interact:
-<p>
-<XMP>
-        use Chatbot::Eliza
-        my ($harry, $sally, $he_says, $she_says);
-        $sally = new Chatbot::Eliza "Sally", "histext.txt";
-        $harry = new Chatbot::Eliza "Harry", "hertext.txt";
-        $he_says  = "I am sad.";
-
-</XMP>
-<PRE>
-        # Seed the random number generator.
-        srand( time ^ ($$ + ($$ &lt;&lt; 15)) );      
-        while (1) {
-                $she_says = $sally->transform( $he_says );
-                print $sally->name, ": $she_says \n";
-        
-                $he_says  = $harry->transform( $she_says );
-                print $harry->name, ": $he_says \n";
-        }
-
+</A></H1>
+<PRE>  use Chatbot::Eliza;
+  # see below for details
 </PRE>
-<p>Of course, as with the original Eliza program,
-the magic of the algorithm is really in the script.
-<p><p><hr>
 
-<H1> 
-<A NAME="Eliza.pm_main_0">
-MAIN DATA MEMBERS</A>
-</H1>
-Each Eliza object uses the following data structures 
-to hold the script data in memory:
-<p>
-<H2> <STRONG>%decomplist</STRONG> </H2>
-<STRONG>hash:</STRONG> the set of keywords; <STRONG>values:</STRONG> strings containing 
-the decomposition rules. 
-<p>
-<H2> <STRONG>%reasmblist</STRONG> </H2>
-<STRONG>hash:</STRONG> a set of values which are each the join 
-of a keyword and a corresponding decomposition rule;  
-<STRONG>values:</STRONG>  the set of possible reassembly statements 
-for that keyword and decomposition rule.  
-<p>
-<H2> <STRONG>%keyranks</STRONG></H2>
-<STRONG>hash:</STRONG> the set of keywords; <STRONG>values:</STRONG> the ranks for each keyword
-<p>
-<H2> <STRONG>@quit</STRONG></H2>
-``quit'' words -- that is, words the user might use 
-to try to exit the program.  
-<p>
-<H2> <STRONG>@initial</STRONG></H2>
+<P>
+
+<P>
+<HR>
+<H1><A NAME="DESCRIPTION">DESCRIPTION
+
+</A></H1>
+This module implements the classic Eliza algorithm. The original Eliza
+program was written by Joseph Weizenbaum and described in the
+Communications of the ACM in 1966. Eliza is a mock Rogerian
+psychotherapist. It prompts for user input, and uses a simple
+transformation algorithm to change user input into a follow-up question.
+The program is designed to give the appearance of understanding.  
+
+
+<P>
+
+This program is a faithful implementation of the program described by
+Weizenbaum. It uses a simplified script language (devised by Charles
+Hayden). The content of the script is the same as Weizenbaum's. 
+
+
+<P>
+
+This module encapsulates the Eliza algorithm in the form of an object. This
+should make the functionality easy to incorporate in larger programs.  
+
+
+<P>
+
+The current version of Chatbot::Eliza.pm is available on CPAN:
+
+
+<P>
+
+<PRE>  <A HREF="http://www.perl.com/CPAN-local/modules/by-module/Chatbot/">http://www.perl.com/CPAN-local/modules/by-module/Chatbot/</A>
+</PRE>
+
+<P>
+
+<P>
+<HR>
+<H1><A NAME="INSTALLATION">INSTALLATION
+
+</A></H1>
+To install this package, just change to the directory in which you created
+by untarring the package and type the following:
+
+
+<P>
+
+<PRE>        perl Makefile.PL
+        make test
+        make
+        make install
+</PRE>
+
+<P>
+
+This will copy Eliza.pm to your perl library directory for use by all perl
+scripts. You probably must be root to do this, unless you have installed a
+personal copy of perl.  
+
+
+<P>
+
+<P>
+<HR>
+<H1><A NAME="USAGE">USAGE
+
+</A></H1>
+This is all you need to do to launch a simple Eliza session:
+
+
+<P>
+
+<PRE>        use Chatbot::Eliza;
+</PRE>
+
+<P>
+
+<PRE>        $mybot = new Chatbot::Eliza;
+        $mybot-&gt;command_interface;
+</PRE>
+
+<P>
+
+You can also customize certain features of the session:
+
+
+<P>
+
+<PRE>        $myotherbot = new Chatbot::Eliza;
+</PRE>
+
+<P>
+
+<PRE>        $myotherbot-&gt;name( &quot;Hortense&quot; );
+        $myotherbot-&gt;debug( 1 );
+</PRE>
+
+<P>
+
+<PRE>        $myotherbot-&gt;command_interface;
+</PRE>
+
+<P>
+
+These lines set the name of the bot to be ``Hortense'' and turn on the
+debugging output.
+
+
+<P>
+
+When creating an Eliza object, you can specify a name and an alternative
+scriptfile:
+
+
+<P>
+
+<PRE>        $bot = new Chatbot::Eliza &quot;Brian&quot;, &quot;myscript.txt&quot;;
+</PRE>
+
+<P>
+
+If you don't specify a script file, then the Eliza module will initialize
+the new Eliza object with a default script that the module contains within
+itself. 
+
+
+<P>
+
+You can use any of the internal functions in a calling program. The code
+below takes an arbitrary string and retrieves the reply from the Eliza
+object:
+
+
+<P>
+
+<PRE>        my $string = &quot;I have too many problems.&quot;;
+        my $reply  = $mybot-&gt;transform( $string );
+</PRE>
+
+<P>
+
+You can easily create two bots, each with a different script, and see how
+they interact:
+
+
+<P>
+
+<PRE>        use Chatbot::Eliza
+</PRE>
+
+<P>
+
+<PRE>        my ($harry, $sally, $he_says, $she_says);
+</PRE>
+
+<P>
+
+<PRE>        $sally = new Chatbot::Eliza &quot;Sally&quot;, &quot;histext.txt&quot;;
+        $harry = new Chatbot::Eliza &quot;Harry&quot;, &quot;hertext.txt&quot;;
+</PRE>
+
+<P>
+
+<PRE>        $he_says  = &quot;I am sad.&quot;;
+</PRE>
+
+<P>
+
+<PRE>        # Seed the random number generator.
+        srand( time ^ ($$ + ($$ &lt;&lt; 15)) );      
+</PRE>
+
+<P>
+
+<PRE>        while (1) {
+                $she_says = $sally-&gt;transform( $he_says );
+                print $sally-&gt;name, &quot;: $she_says \n&quot;;
+        
+                $he_says  = $harry-&gt;transform( $she_says );
+                print $harry-&gt;name, &quot;: $he_says \n&quot;;
+        }
+</PRE>
+
+<P>
+
+Mechanically, this works well. However, it critically depends on the actual
+script data. Having two mock Rogerian therapists talk to each other usually
+does not produce any sensible conversation, of course.  
+
+
+<P>
+
+After each call to the <CODE>transform()</CODE> method, the debugging
+output for that transformation is stored in a variable called $debug_text.
+
+
+<P>
+
+<PRE>        my $reply      = $mybot-&gt;transform( &quot;My foot hurts&quot; );
+        my $debugging  = $mybot-&gt;debug_text;
+</PRE>
+
+<P>
+
+This feature always available, even if the instance's <CODE>$debug</CODE>
+variable is set to 0. 
+
+
+<P>
+
+<P>
+<HR>
+<H1><A NAME="MAIN_DATA_MEMBERS">MAIN DATA MEMBERS
+
+</A></H1>
+Each Eliza object uses the following data structures to hold the script
+data in memory:
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_decomplist">%decomplist 
+
+</A></H2>
+<EM>Hash</EM>: the set of keywords;  <EM>Values</EM>: strings containing the decomposition rules. 
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_reasmblist">%reasmblist 
+
+</A></H2>
+<EM>Hash</EM>: a set of values which are each the join of a keyword and a corresponding
+decomposition rule;  
+<EM>Values</EM>: the set of possible reassembly statements for that keyword and
+decomposition rule.  
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_reasmblist_for_memory">%reasmblist_for_memory
+
+</A></H2>
+This structure is identical to <CODE>%reasmblist</CODE>, except that these rules are only invoked when a user comment is being
+retrieved from memory. These contain comments such as ``Earlier you
+mentioned that...,'' which are only appropriate for remembered comments.
+Rules in the script must be specially marked in order to be included in
+this list rather than <CODE>%reasmblist</CODE>. The default script only has a few of these rules. 
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_memory">@memory
+
+</A></H2>
+A list of user comments which an Eliza instance is remembering for future
+use. Eliza does not remember everything, only some things. In this
+implementation, Eliza will only remember comments which match a
+decomposition rule which actually has reassembly rules that are marked with
+the keyword ``reasm_for_memory'' rather than the normal ``reasmb''. The
+default script only has a few of these.  
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_keyranks">%keyranks
+
+</A></H2>
+<EM>Hash</EM>: the set of keywords;  <EM>Values</EM>: the ranks for each keyword
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_quit">@quit
+
+</A></H2>
+``quit'' words -- that is, words the user might use to try to exit the
+program.  
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_initial">@initial
+
+</A></H2>
 Possible greetings for the beginning of the program.
-<p>
-<H2> <STRONG>@final</STRONG></H2>
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_final">@final
+
+</A></H2>
 Possible farewells for the end of the program.
-<p>
-<H2> <STRONG>%pre</STRONG></H2>
-<STRONG>hash:</STRONG> words which are replaced before any transformations;
-<STRONG>values:</STRONG> the respective replacement words.
-<p>
-<H2> <STRONG>%post</STRONG></H2>
-<STRONG>hash:</STRONG> words which are replaced after the transformations 
-and after the reply is constructed; <STRONG>values</STRONG>: the respective 
-replacement words.
- 
-<p>
-<H2> <STRONG>%synon</STRONG>	</H2>
-<STRONG>hash:</STRONG> words which are found in decomposition rules;
-<STRONG>values:</STRONG> words which are treated just like their 
-corresponding synonyms during matching of decomposition
-rules. 
-<p><p><hr>
 
-<H1> 
-<A NAME="Eliza.pm_methods_0">
-METHODS</A>
-</H1>
-<p>
-<H2> my <STRONG>$chatterbot</STRONG> = new Chatbot::Eliza;</H2>
-<STRONG>new</STRONG> creates a new Eliza object.  This method
-also calls the internal <STRONG> _initialize</STRONG> method, which in turn
-calls the <STRONG>parse_script_data</STRONG> method, which initializes
-the script data.  
-<p>
-<H2> my <STRONG>$chatterbot</STRONG> = new Chatbot::Eliza 'Ahmad', 'myfile.txt';</H2>
-The eliza object defaults to the name ``Eliza'', and it
-contains default script data within itself.  However,
-using the syntax above, you can specify an alternative
-name and an alternative script file. 
-<p>See the method <STRONG>parse_script_data</STRONG>. for a description
-of the format of the script file. 
-<p>
-<H2> <STRONG>$chatterbot</STRONG>-&gt;command_interface;</H2>
-<STRONG>command_interface</STRONG> opens an interactive session with 
-the Eliza object, just like the original Eliza program.
-<p>If you want to design your own session format, then 
-you can write your own while loop and your own functions
-for prompting for and reading user input, and use the 
-<STRONG>transform</STRONG> method to generate Eliza's responses. 
-<p>But if you're lazy and you want to skip all that,
-then just use <STRONG>command_interface</STRONG>.  It's all done for you. 
-<p>
-<H2> <STRONG>$string</STRONG> = preprocess(<STRONG>$string</STRONG>);</H2>
-<STRONG>preprocess</STRONG> applies simple substitution rules to the input string.
-Mostly this is to catch varieties in spelling, misspellings,
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_pre">%pre
+
+</A></H2>
+<EM>Hash</EM>: words which are replaced before any transformations;  
+<EM>Values</EM>: the respective replacement words.
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_post">%post
+
+</A></H2>
+<EM>Hash</EM>: words which are replaced after the transformations and after the reply is
+constructed;  <EM>Values</EM>: the respective replacement words.
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_synon">%synon
+
+</A></H2>
+<EM>Hash</EM>: words which are found in decomposition rules;  
+<EM>Values</EM>: words which are treated just like their corresponding synonyms during
+matching of decomposition rules. 
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="Other_data_members">Other data members
+
+</A></H2>
+There are several other internal data members. Hopefully these are
+sufficiently obvious that you can learn about them just by reading the
+source code.  
+
+
+<P>
+
+<P>
+<HR>
+<H1><A NAME="METHODS">METHODS
+
+</A></H1>
+<P>
+<HR>
+<H2><A NAME="new_">new()
+
+</A></H2>
+<PRE>    my $chatterbot = new Chatbot::Eliza;
+</PRE>
+
+<P>
+
+<CODE>new()</CODE> creates a new Eliza object. This method also calls the
+internal <CODE>_initialize()</CODE> method, which in turn calls the
+<CODE>parse_script_data()</CODE> method, which initializes the script data.  
+
+
+<P>
+
+<PRE>    my $chatterbot = new Chatbot::Eliza 'Ahmad', 'myfile.txt';
+</PRE>
+
+<P>
+
+The eliza object defaults to the name ``Eliza'', and it contains default
+script data within itself. However, using the syntax above, you can specify
+an alternative name and an alternative script file. 
+
+
+<P>
+
+See the method <CODE>parse_script_data().</CODE> for a description of the
+format of the script file. 
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="command_interface_">command_interface()
+
+</A></H2>
+<PRE>    $chatterbot-&gt;command_interface;
+</PRE>
+
+<P>
+
+<CODE>command_interface()</CODE> opens an interactive session with the
+Eliza object, just like the original Eliza program.
+
+
+<P>
+
+If you want to design your own session format, then you can write your own
+while loop and your own functions for prompting for and reading user input,
+and use the <CODE>transform()</CODE> method to generate Eliza's responses.
+(<EM>Note</EM>: you do not need to invoke <CODE>preprocess()</CODE> and
+<CODE>postprocess()</CODE> directly, because these are invoked from within
+the <CODE>transform()</CODE> method.) 
+
+
+<P>
+
+But if you're lazy and you want to skip all that, then just use
+<CODE>command_interface().</CODE> It's all done for you. 
+
+
+<P>
+
+During an interactive session invoked using
+<CODE>command_interface(),</CODE> you can enter the word ``debug'' to
+toggle debug mode on and off. You can also enter the keyword ``memory'' to
+invoke the <CODE>_debug_memory()</CODE> method and print out the contents
+of the Eliza instance's memory.
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="preprocess_">preprocess()
+
+</A></H2>
+<PRE>    $string = preprocess($string);
+</PRE>
+
+<P>
+
+<CODE>preprocess()</CODE> applies simple substitution rules to the input
+string. Mostly this is to catch varieties in spelling, misspellings,
 contractions and the like.  
-<p><STRONG>preprocess</STRONG> is called from within the <STRONG>transform</STRONG> method.  
-It is applied to user-input text, BEFORE any processing,
-and before a reassebly statement has been selected. 
-<p>It uses the array 
-<A HREF="Eliza.pm.html#Eliza.pm_pre_0"><STRONG>%pre</STRONG></A>
-, which is created 
-during the parse of the script.
-<p>
-<H2> <STRONG>$string</STRONG> = postprocess(<STRONG>$string</STRONG>);</H2>
-<STRONG>postprocess</STRONG> applies simple substitution rules to the 
-reassembly rule.  This is where all the ``I'''s and ``you'''s 
-are exchanged.  <STRONG>postprocess</STRONG> is called from within the
-<STRONG>transform</STRONG> function.
-<p>It uses the array 
-<A HREF="Eliza.pm.html#Eliza.pm_post_0"><STRONG>%post</STRONG></A>
-, created during the parse of the script.
-<p>
-<H2> if (<STRONG>$self</STRONG>-&gt;_testquit(<STRONG>$user_input</STRONG>) ) { ... }</H2>
-<STRONG> _testquit</STRONG> detects words like ``bye'' and ``quit'' and returns
-true if it finds one of them as the first word in the sentence. 
-<p>These words are listed in the script, under the keyword ``quit''. 
-<p>
-<H2> <STRONG>$reply</STRONG> = <STRONG>$chatterbot</STRONG>-&gt;transform( <STRONG>$string</STRONG> );</H2>
-<STRONG>transform</STRONG> applies transformation rules to the user input
-string.  It invokes <STRONG>preprocess</STRONG>, does transformations, 
-then invokes <STRONG>postprocess</STRONG>.  It returns the tranformed 
-output string, called <STRONG><STRONG>$reasmb</STRONG></STRONG>.  
-<p>
-<H2> <STRONG>$self</STRONG>-&gt;parse_script_data;</H2>
-<STRONG>parse_script_data</STRONG> is invoked from the <STRONG> _initialize</STRONG> method.
-It opens the scriptfile, if any, and reads in the script data.  
-<p><p><hr>
 
-<H1> 
-<A NAME="Eliza.pm_format_0">
-FORMAT OF THE SCRIPT FILE</A>
-</H1>
-This module includes a default script file within itself, 
-so it is not necessary to explicitly specify a script file 
-when instantiating an Eliza object.  
-<p>Each line in the script file can specify a key,
-a decomposition rule, or a reassembly rule.
-<p>key: remember 5
-  decomp: * i remember *
-    reasmb: Do you often think of (2) ?
-    reasmb: Does thinking of (2) bring anything else to mind ?
-  decomp: * do you remember *
-    reasmb: Did you think I would forget (2) ?
-    reasmb: What about (2) ?
-    reasmb: goto what
-pre: equivalent alike
-synon: belief feel think believe wish
-<p>The number after the key specifies the rank.
-If a user's input contains the keyword, then
-the ``transform'' function will try to match
-one of the decomposition rules for that keyword.
-If one matches, then it will select one of
-the reassembly rules at random.  The number
-(2) here means "use whatever set of words
-matched the second asterisk in the decomposition
-rule." 
-<p>If you specify a list of synonyms for a word,
-the you should use a <STRONG>@ </STRONG>when you use that
-word in a decomposition rule:
-<p>
-<XMP>
-  decomp: * i @belief i *
+
+<P>
+
+<CODE>preprocess()</CODE> is called from within the
+<CODE>transform()</CODE> method. It is applied to user-input text, BEFORE
+any processing, and before a reassebly statement has been selected. 
+
+
+<P>
+
+It uses the array <CODE>%pre</CODE>, which is created during the parse of the script.
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="postprocess_">postprocess()
+
+</A></H2>
+<PRE>    $string = postprocess($string);
+</PRE>
+
+<P>
+
+<CODE>postprocess()</CODE> applies simple substitution rules to the
+reassembly rule. This is where all the ``I'''s and ``you'''s are exchanged.
+<CODE>postprocess()</CODE> is called from within the
+<CODE>transform()</CODE> function.
+
+
+<P>
+
+It uses the array <CODE>%post</CODE>, created during the parse of the script.
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_testquit_">_testquit()
+
+</A></H2>
+<PRE>     if ($self-&gt;_testquit($user_input) ) { ... }
+</PRE>
+
+<P>
+
+<CODE>_testquit()</CODE> detects words like ``bye'' and ``quit'' and
+returns true if it finds one of them as the first word in the sentence. 
+
+
+<P>
+
+These words are listed in the script, under the keyword ``quit''. 
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="_debug_memory_">_debug_memory()
+
+</A></H2>
+<PRE>     $self-&gt;_debug_memory()
+</PRE>
+
+<P>
+
+<CODE>_debug_memory()</CODE> is a special function which returns the
+contents of Eliza's memory stack. 
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="transform_">transform()
+
+</A></H2>
+<PRE>    $reply = $chatterbot-&gt;transform( $string, $use_memory );
+</PRE>
+
+<P>
+
+<CODE>transform()</CODE> applies transformation rules to the user input
+string. It invokes <CODE>preprocess(),</CODE> does transformations, then
+invokes <CODE>postprocess().</CODE> It returns the tranformed output
+string, called <CODE>$reasmb</CODE>.  
+
+
+<P>
+
+The algorithm embedded in the <CODE>transform()</CODE> method has three
+main parts:
+
+
+<P>
+
+<OL>
+<LI><STRONG><A NAME="item_"> 
+
+</A></STRONG>
+Search the input string for a keyword.
+
+
+<P>
+
+<LI><STRONG><A NAME="item_"> 
+
+</A></STRONG>
+If we find a keyword, use the list of decomposition rules for that keyword,
+and pattern-match the input string against each rule.
+
+
+<P>
+
+<LI><STRONG><A NAME="item_">
+
+</A></STRONG>
+If the input string matches any of the decomposition rules, then randomly
+select one of the reassembly rules for that decomposition rule, and use it
+to construct the reply. 
+
+
+<P>
+
+</OL>
+<CODE>transform()</CODE> takes two parameters. The first is the string we
+want to transform. The second is a flag which indicates where this sting
+came from. If the flag is set, then the string has been pulled from memory,
+and we should use reassembly rules appropriate for that. If the flag is not
+set, then the string is the most recent user input, and we can use the
+ordinary reassembly rules. 
+
+
+<P>
+
+The memory flag is only set when the <CODE>transform()</CODE> function is
+called recursively. The mechanism for setting this parameter is embedded in
+the transoform method itself. If the flag is set inappropriately, it is
+ignored.  
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="How_memory_is_used">How memory is used
+
+</A></H2>
+An Eliza object remembers up to <CODE>$max_memory_size</CODE> (default: 5) user input strings. Eliza remembers any comment when it
+matches a docomposition rule for which there are any reassembly rules for
+memory. In the script, such reassembly rules are marked with the keyword
+``reasm_for_memory''.  
+
+
+<P>
+
+If the <CODE>transform()</CODE> method fails to find any appropriate
+decomposition rule for a user's comment, and if there are any comments
+inside the memory array, then Eliza may elect to ignore the most recent
+comment and instead pull out one of the strings from memory. In this case,
+the transform method is called recursively with the memory flag. 
+
+
+<P>
+
+Honestly, I am not sure exactly how this memory functionality was
+implemented in the original Eliza program. Hopefully this implementation is
+not too far from Weizenbaum's. 
+
+
+<P>
+
+<P>
+<HR>
+<H2><A NAME="parse_script_data_">parse_script_data()
+
+</A></H2>
+<PRE>    $self-&gt;parse_script_data;
+    $self-&gt;parse_script_data( $script_file );
+</PRE>
+
+<P>
+
+<CODE>parse_script_data()</CODE> is invoked from the
+<CODE>_initialize()</CODE> method, which is called from the
+<CODE>new()</CODE> function. However, you can also call this method at any
+time against an already-instantiated Eliza instance. In that case, the new
+script data is <EM>added</EM>
+to the old script data. The old script data is not deleted. 
+
+
+<P>
+
+You can pass a parameter to this function, which is the name of the script
+file, and it will read in and parse that file. If you do not pass any
+parameter to this method, then it will read the data embedded at the end of
+the module as its default script data.  
+
+
+<P>
+
+If you pass the name of a script file to <CODE>parse_script_data(),</CODE>
+and that file is not available for reading, then the module dies.  
+
+
+<P>
+
+<P>
+<HR>
+<H1><A NAME="Format_of_the_script_file">Format of the script file
+
+</A></H1>
+This module includes a default script file within itself, so it is not
+necessary to explicitly specify a script file when instantiating an Eliza
+object.  
+
+
+<P>
+
+Each line in the script file can specify a key, a decomposition rule, or a
+reassembly rule.
+
+
+<P>
+
+<PRE>  key: remember 5
+    decomp: * i remember *
+      reasmb: Do you often think of (2) ?
+      reasmb: Does thinking of (2) bring anything else to mind ?
+    decomp: * do you remember *
+      reasmb: Did you think I would forget (2) ?
+      reasmb: What about (2) ?
+      reasmb: goto what
+  pre: equivalent alike
+  synon: belief feel think believe wish
+</PRE>
+
+<P>
+
+The number after the key specifies the rank. If a user's input contains the
+keyword, then the <CODE>transform()</CODE> function will try to match one
+of the decomposition rules for that keyword. If one matches, then it will
+select one of the reassembly rules at random. The number (2) here means
+``use whatever set of words matched the second asterisk in the
+decomposition rule.'' 
+
+
+<P>
+
+If you specify a list of synonyms for a word, the you should use a ``@''
+when you use that word in a decomposition rule:
+
+
+<P>
+
+<PRE>  decomp: * i @belief i *
     reasmb: Do you really think so ?
     reasmb: But you are not sure you (3).
+</PRE>
 
-</XMP>
-<p>Otherwise, the script will never check to see
-if there are any synonyms for that keyword. 
-<p><p><hr>
+<P>
 
-<H1> 
-<A NAME="Eliza.pm_how_0">
-HOW THE SCRIPTFILE IS PARSED</A>
-</H1>
-Each line in the script file contains an ``entrytype''
-(key, decomp, synon) and an ``entry'', separated by
-a colon.  In turn, each ``entry'' can itself be 
-composed of a ``key'' and a ``value'', separated by
-a space.  The <STRONG>parse_script_data</STRONG> function
-parses each line out, and splits the ``entry'' and
-``entrytype'' portion of each line into two variables,
-``<STRONG>$entry</STRONG>'' and ``<STRONG>$entrytype</STRONG>''. 
-<p>Next, it uses the string ``<STRONG>$entrytype</STRONG>'' to determine 
-what sort of stuff to expect in the ``<STRONG>$entry</STRONG>'' variable,  
-if anything, and parses it accordingly.  In some cases,
-there is no second level of key-value pair, so the function
-does not even bother to isolate or create ``<STRONG>$key</STRONG>'' and ``<STRONG>$value</STRONG>''. 
-<p>``<STRONG>$key</STRONG>'' is always a single word.  ``<STRONG>$value</STRONG>'' can be null, 
-or one single word, or a string composed of several words, 
-or an array of words.  
-<p>Based on all these entries and keys and values,
-the function creates two giant hashes:
-<STRONG><STRONG>%decomplist</STRONG></STRONG>, which holds the decomposition rules for
-each keyword, and <STRONG><STRONG>%reasmblist</STRONG></STRONG>, which holds the 
-reassembly phrases for each decomposition rule. 
-It also creates <STRONG>%keyranks</STRONG>, which holds the ranks for
-each key.  
-<p>Five other arrays are created: B<<STRONG>%pre</STRONG>, <STRONG>%post</STRONG>, 
-<STRONG>%synon</STRONG>, <STRONG>@initial</STRONG>,&gt; and 
-<A HREF="Eliza.pm.html#Eliza.pm_final_0"><STRONG>@final</STRONG></A>
-. 
-<p>
-<H2> John Nolan (<A HREF="MAILTO:jnolan@n2k.com">jnolan@n2k.com</A>) November 1997</H2>
-<p>
-</BODY>
-</HTML>
+Otherwise, the script will never check to see if there are any synonyms for
+that keyword. 
+
+
+<P>
+
+Reassembly rules should be marked with <EM>reasm_for_memory</EM>
+rather than <EM>reasmb</EM> when it is appropriate for use when a user's comment has been extracted
+from memory. 
+
+
+<P>
+
+<PRE>  key: my 2
+    decomp: * my *
+      reasm_for_memory: Let's discuss further why your (2).
+      reasm_for_memory: Earlier you said your (2).
+      reasm_for_memory: But your (2).
+      reasm_for_memory: Does that have anything to do with the fact that your (2) ?
+</PRE>
+
+<P>
+
+<P>
+<HR>
+<H1><A NAME="How_the_script_file_is_parsed">How the script file is parsed
+
+</A></H1>
+Each line in the script file contains an ``entrytype'' (key, decomp, synon)
+and an ``entry'', separated by a colon. In turn, each ``entry'' can itself
+be composed of a ``key'' and a ``value'', separated by a space. The
+<CODE>parse_script_data()</CODE> function parses each line out, and splits
+the ``entry'' and ``entrytype'' portion of each line into two variables,
+<CODE>$entry</CODE> and <CODE>$entrytype</CODE>. 
+
+
+<P>
+
+Next, it uses the string <CODE>$entrytype</CODE> to determine what sort of stuff to expect in the <CODE>$entry</CODE> variable, if anything, and parses it accordingly. In some cases, there is
+no second level of key-value pair, so the function does not even bother to
+isolate or create <CODE>$key</CODE> and <CODE>$value</CODE>. 
+
+
+<P>
+
+<CODE>$key</CODE> is always a single word.  <CODE>$value</CODE> can be null, or one single word, or a string composed of several words, or
+an array of words.  
+
+
+<P>
+
+Based on all these entries and keys and values, the function creates two
+giant hashes:
+<CODE>%decomplist</CODE>, which holds the decomposition rules for each keyword, and <CODE>%reasmblist</CODE>, which holds the reassembly phrases for each decomposition rule. It also
+creates <CODE>%keyranks</CODE>, which holds the ranks for each key.  
+
+
+<P>
+
+Six other arrays are created: <CODE>%reasm_for_memory, %pre, %post, 
+%synon, @initial,</CODE> and <CODE>@final</CODE>. 
+
+
+<P>
+
+<P>
+<HR>
+<H1><A NAME="AUTHOR">AUTHOR
+
+</A></H1>
+John Nolan <A HREF="MAILTO:jnolan@n2k.com">jnolan@n2k.com</A> July 1998.  
+
+
+<P>
+
+Implements the classic Eliza algorithm by Prof. Joseph Weizenbaum. Script
+format devised by Charles Hayden. 
+
+
+<P>
+
+</DL>
+    </BODY>
+
+    </HTML>

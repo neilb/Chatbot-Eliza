@@ -1,8 +1,11 @@
 #!/usr/bin/perl
 
-# This simple script implements a Chatbot::Eliza
-# object in a cgi program.  It uses the CGI.pm module 
+# This script implements a Chatbot::Eliza object 
+# in a cgi program.  It uses the CGI.pm module 
 # written by Lincoln Stein.
+#
+# It also prints out the debugging output available
+# in the Eliza chatbot module.
 #
 # Needless to say, you must have the CGI.pm module
 # installed and working properly with CGI scripts on
@@ -25,12 +28,18 @@ print $cgi->start_html;
 print $cgi->start_multipart_form;
 print $cgi->h2('Eliza session');
 
+# These lines contain the "Eliza" functionality.
+# User comments are passed through the module's transform
+# method, and the output is used to prompt the user 
+# for futher input. 
+#
 if ( $cgi->param() ) {
 	$prompt = $chatbot->transform( $cgi->param('Comment') );
 } else {
 	$prompt = $chatbot->transform('Hello');
 }
 
+$comment = $cgi->param('Comment');
 $cgi->param('Comment','');
 
 print 	$cgi->h3($prompt),
@@ -41,9 +50,13 @@ print 	$cgi->h3($prompt),
 			-columns => 70 );
 
 print 	$cgi->p,
-	$cgi->submit('Action','Send to Eliza'),
-	$cgi->reset('Reset');
+	$cgi->submit('Action','Send to Eliza');
 
 print $cgi->endform;
+print $cgi->hr;
+
+print $cgi->h2('Debugging Output');
+print $cgi->pre($comment,"\n",$chatbot->debug_text,"\n",$prompt);
+
 print $cgi->end_html;
 

@@ -1,4 +1,4 @@
-README file for Chatbot::Eliza version 0.32
+README file for Chatbot::Eliza version 0.40
 
 This module implements the classic Eliza algorithm. The original Eliza
 program was written by Joseph Weizenbaum and described in the
@@ -52,7 +52,35 @@ make install
 
 WHAT'S NEW?         
 
-Version 0.32
+Version 0.40 - July 1998
+------------
+
+Re-implemented the memory functionality.   (Hope it's working!)
+
+Cleaned up and expanded the embedded POD documentation.  
+
+Added a sample script in German.  (Ich freue mich auf
+die Kritik deutsch-sprachiger Perlmongers!)
+
+Modified the debugging behavior.  The transform() method itself 
+will no longer print any debugging output directly to STDOUT.  
+Instead, all debugging output is stored in a module variable 
+called "debug_text".  The "debug_text" variable is printed out 
+by the command_interface() method, if the debug flag is set.   
+But even if this flag is not set, the variable debug_text 
+is still available to any calling program.  
+
+Added a few more example scripts which use the module.  
+
+  simple.pl    - simple script using Eliza.pm
+  simple.cgi   - simple CGI script using Eliza.pm
+  debug.cgi    - CGI script which displays debugging output
+  deutsch.pl   - script using the German script
+  deutsch.cgi  - CGI script using the German script
+  twobots.pl   - script which creates two distinct bots
+
+
+Version 0.32 - December 1997
 ------------
 
 Fixed a bug in the way Eliza loads its default internal script data.
@@ -78,4 +106,5 @@ This is the first module I've ever submitted to CPAN.
 I'm curious to hear any comments or criticism,
 or ways to improve this module in future versions.
 
---John Nolan, jnolan@n2k.com, Novermber 1997.           
+
+--John Nolan, jnolan@n2k.com           

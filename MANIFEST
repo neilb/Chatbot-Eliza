@@ -1,9 +1,14 @@
 Chatbot/Eliza.pm
 Makefile.PL
 test.pl
-example1.pl
-example2.cgi
-example3.pl
+examples/simple.pl
+examples/simple.cgi
+examples/debug.cgi
+examples/deutsch.pl
+examples/deutsch.cgi
+examples/twobots.pl
+examples/doctor.txt
+examples/deutsch.txt
 doc/Eliza.pm.html
 doc/Eliza.pm.txt
 README
