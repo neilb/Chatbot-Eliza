@@ -20,7 +20,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '0.91';
+$VERSION = '0.93';
 sub Version { $VERSION; }
 
 
@@ -106,6 +106,18 @@ a name and an alternative scriptfile:
 
 	$bot = new Chatbot::Eliza "Brian", "myscript.txt";
 
+You can also use an anonymous hash to set these parameters.
+Any of the fields can be initialized using this syntax:
+
+	$bot = new Chatbot::Eliza {
+		name       => "Brian", 
+		scriptfile => "myscript.txt",
+		debug      => 1,
+		prompts_on => 1,
+		memory_on  => 0,
+		myrand     => sub { rand($_[0]); },
+	};
+
 If you don't specify a script file, then the
 Eliza module will initialize the new Eliza
 object with a default script that the module
@@ -155,6 +167,28 @@ for that transformation is stored in a variable called $debug_text.
 
 This feature always available, even if the instance's $debug 
 variable is set to 0. 
+
+Calling programs can specify their own random-number generators.
+Use this syntax:
+
+        $chatbot = new Chatbot::Eliza;
+        $chatbot->myrand(
+                sub {
+                        #function goes here!
+                }
+        );
+
+The custom random function should have the same prototype
+as perl's built-in rand() function.  That is, it should take
+a single (numeric) expression as a parameter, and it should
+return a floating-point value between 0 and that number.
+
+What this code actually does is pass a reference to an anonymous
+subroutine ("code reference").  Make sure you've read the perlref
+manpage for details on how code references actually work. 
+
+If you don't specify any custom rand function, then the Eliza
+object will just use the built-in rand() function. 
 
 =head1 MAIN DATA MEMBERS
 
@@ -246,9 +280,11 @@ my %fields = (
 	debug_text	=> '',
 	transform_text	=> '',
 	prompts_on	=> 1,
-	memory_on   => 1,
+	memory_on       => 1,
 	botprompt	=> '',
 	userprompt	=> '',
+
+	myrand          => sub { rand($_[0]); },
 
 	keyranks	=> undef,
 	decomplist	=> undef,
@@ -308,9 +344,20 @@ sub new {
 } # end method new
 
 sub _initialize {
-	my ($self,$name,$scriptfile) = @_;
-	$self->name($name) if $name;
-	$self->parse_script_data($scriptfile);
+	my ($self,$param1,$param2) = @_;
+
+	if (defined $param1 and ref $param1 eq "HASH") {
+
+		# Allow the calling program to pass in intial parameters
+		# as an anonymous hash
+		map { $self->{$_} = $param1->{$_}; } keys %$param1;
+
+		$self->parse_script_data( $self->{scriptfile} );
+
+	} else {
+		$self->name($param1) if $param1;
+		$self->parse_script_data($param2);
+	} 
 
 	# Initialize the memory array ref at instantiation time,
 	# rather than at class definition time. 
@@ -381,7 +428,7 @@ sub command_interface {
 	print $self->botprompt if $self->prompts_on;
 
 	# Print an initial greeting
-	print "$self->{initial}->[ int rand scalar @{ $self->{initial} } ]\n";
+	print "$self->{initial}->[ int &{$self->{myrand}}( scalar @{ $self->{initial} } ) ]\n";
 
 
 	###################################################################
@@ -399,7 +446,7 @@ sub command_interface {
 		# If the user wants to quit,
 		# print out a farewell and quit.
 		if ($self->_testquit($user_input) ) {
-			$reply = "$self->{final}->[ int rand scalar @{ $self->{final} } ]";
+			$reply = "$self->{final}->[ int &{$self->{myrand}}( scalar @{$self->{final}} ) ]";
 			print $self->botprompt if $self->prompts_on;
 			print "$reply\n";
 			last;
@@ -728,7 +775,7 @@ sub transform{
 					}
 
 					# Pick out a reassembly rule at random. 
-					$reasmb = $these_reasmbs[ int rand scalar @these_reasmbs ];
+					$reasmb = $these_reasmbs[ int &{$self->{myrand}}( scalar @these_reasmbs ) ];
 
 					$self->debug_text($self->debug_text . sprintf "\t\t-->  $reasmb\n");
 
@@ -744,7 +791,8 @@ sub transform{
 
 					# Otherwise, using the matches to wildcards which we stored above,
 					# insert words from the input string back into the reassembly rule. 
-					for ($i=1; $i< $#decomp_matches; $i++) {
+					# [THANKS to XXX for submitting a buxfix here]
+					for ($i=1; $i <= $#decomp_matches; $i++) {
 						$decomp_matches[$i] = $self->postprocess( $decomp_matches[$i] );
 						$decomp_matches[$i] =~ s/([,;?!]|\.*)$//;
 						$reasmb =~ s/\($i\)/$decomp_matches[$i]/;
@@ -804,7 +852,7 @@ script data only has 4 such items.
 		# and make sure that it has something to parse. 
 		# Use a string from memory if anything is available. 
 		#
-		if ($#{ $self->memory } >= 0 and rand() <= $self->likelihood_of_using_memory) {
+		if ($#{ $self->memory } >= 0 and &{$self->{myrand}}() <= $self->likelihood_of_using_memory) {
 
 			$reasmb =  $self->transform( shift @{ $self->memory }, "use memory" );
 

@@ -1,4 +1,4 @@
-README file for Chatbot::Eliza version 0.91
+README file for Chatbot::Eliza version 0.92
 
 This module implements the classic Eliza algorithm. The original Eliza
 program was written by Joseph Weizenbaum and described in the
@@ -53,6 +53,40 @@ make install
 WHAT'S NEW?         
 
 
+Version 0.93 - June 1999
+------------
+
+Calling programs can now specify their own random-number generators.  
+Use this syntax:
+
+	$chatbot = new Chatbot::Eliza;
+	$chatbot->myrand( 
+		sub { 
+			#function goes here! 
+		} 
+	);
+
+The custom random function should have the same prototype
+as perl's built-in rand() function.  That is, it should take
+a single (numeric) expression as a parameter, and it should 
+return a floating-point value between 0 and that number.  
+
+You can also now use an anonymous hash as a parameter to the 
+new() method to define any fields in that bot instance:
+
+        $bot = new Chatbot::Eliza {
+                name       => "Brian",
+                scriptfile => "myscript.txt",
+                debug      => 1,
+        };
+
+
+Version 0.92 - April 1999
+------------
+
+Fixed some more misspellings. 
+
+
 Version 0.91 - April 1999
 ------------
 
@@ -71,7 +105,7 @@ function is invoked.  Thanks to Antony Quintal
 for pointing out the error. 
 
 Many corrections and improvements were made 
-to the German script by Mattias Hellmund.  
+to the German script by Matthias Hellmund.  
 Thanks, Matthias!
 
 Made a minor syntactical change, at the suggestion
