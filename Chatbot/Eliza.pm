@@ -2,7 +2,7 @@
 
 package Chatbot::Eliza;
  
-# Copyright (c) 1997-1999 John Nolan. All rights reserved. 
+# Copyright (c) 1997-2002 John Nolan. All rights reserved. 
 # This program is free software.  You may modify and/or 
 # distribute it under the same terms as Perl itself.  
 # This copyright notice must remain attached to the file.  
@@ -20,7 +20,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '0.97';
+$VERSION = '1.01';
 sub Version { $VERSION; }
 
 
@@ -35,7 +35,12 @@ B<Chatbot::Eliza> - A clone of the classic Eliza program
 =head1 SYNOPSIS
 
   use Chatbot::Eliza;
+
+  $mybot = new Chatbot::Eliza;
+  $mybot->command_interface;
+
   # see below for details
+
 
 =head1 DESCRIPTION
 
@@ -58,12 +63,12 @@ This module encapsulates the Eliza algorithm
 in the form of an object.  This should make 
 the functionality easy to incorporate in larger programs.  
 
+
+=head1 INSTALLATION
+
 The current version of Chatbot::Eliza.pm is available on CPAN:
 
   http://www.perl.com/CPAN/modules/by-module/Chatbot/
-
-
-=head1 INSTALLATION
 
 To install this package, just change to the directory which 
 you created by untarring the package, and type the following:
@@ -119,10 +124,9 @@ Any of the fields can be initialized using this syntax:
 			sub { my $N = defined $_[0] ? $_[0] : 1;  rand($N); },
 	};
 
-If you don't specify a script file, then the
-Eliza module will initialize the new Eliza
-object with a default script that the module
-contains within itself. 
+If you don't specify a script file, then the new object will be
+initialized with a default script.  The module contains this 
+script within itself. 
 
 You can use any of the internal functions in
 a calling program.  The code below takes an 
@@ -363,7 +367,7 @@ sub _initialize {
 
 	# Initialize the memory array ref at instantiation time,
 	# rather than at class definition time. 
-	# (Thanks to Randal Schwartz and Robert Chin for fixing this bug.) 
+	# (THANKS to Randal Schwartz and Robert Chin for fixing this bug.) 
 	#
 	$self->{memory} = [];
 }
@@ -616,7 +620,7 @@ sub _debug_memory {
 	$string .= $#{ $self->memory } + 1;
 	$string .= " item(s) in memory stack:\n";
 
-	# [Thanks to Roy Stephan for helping me adjust this bit]
+	# [THANKS to Roy Stephan for helping me adjust this bit]
 	#
 	foreach (@{ $self->memory } ) { 
 
@@ -688,7 +692,7 @@ sub transform{
 		$decomp, $this_decomp, $reasmbkey, @these_reasmbs,
 		@decomp_matches, $synonyms, $synonym_index);
 
-   # Default to a really low rank. 
+	# Default to a really low rank. 
 	$rank   = -2;
 	$reasmb = "";
 	$goto   = "";
@@ -699,7 +703,7 @@ sub transform{
 	# Convert punctuation to periods.  We will assume that commas
 	# and certain conjunctions separate distinct thoughts/sentences.  
 	$string =~ s/[?!,]/./g;
-	$string =~ s/but/./g;
+	$string =~ s/but/./g;   #   Yikes!  This is English-specific. 
 
 	# Split the string by periods into an array
 	@string_parts = split /\./, $string ;
@@ -793,7 +797,7 @@ sub transform{
 
 					# Otherwise, using the matches to wildcards which we stored above,
 					# insert words from the input string back into the reassembly rule. 
-					# [THANKS to XXX for submitting a buxfix here]
+					# [THANKS to Gidon Wise for submitting a bugfix here]
 					for ($i=1; $i <= $#decomp_matches; $i++) {
 						$decomp_matches[$i] = $self->postprocess( $decomp_matches[$i] );
 						$decomp_matches[$i] =~ s/([,;?!]|\.*)$//;
@@ -819,17 +823,18 @@ sub transform{
 
 =head2 How memory is used
 
+In the script, some reassembly rules are special.  They are marked with
+the keyword "reasm_for_memory", rather than just "reasm".  
+Eliza "remembers" any comment when it matches a docomposition rule 
+for which there are any reassembly rules for memory. 
 An Eliza object remembers up to C<$max_memory_size> (default: 5) 
-user input strings.  Eliza remembers any comment when it matches
-a docomposition rule for which there are any reassembly rules for 
-memory. In the script, such reassembly rules are marked with
-the keyword "reasm_for_memory".  
+user input strings.  
 
-If the transform() method fails to find any appropriate decomposition
-rule for a user's comment, and if there are any comments inside 
-the memory array, then Eliza may elect to ignore the most recent comment 
-and instead pull out one of the strings from memory.  In this case, 
-the transform method is called recursively with the memory flag. 
+If, during a subsequent run, the transform() method fails to find any 
+appropriate decomposition rule for a user's comment, and if there are 
+any comments inside the memory array, then Eliza may elect to ignore 
+the most recent comment and instead pull out one of the strings from memory.  
+In this case, the transform method is called recursively with the memory flag. 
 
 Honestly, I am not sure exactly how this memory functionality
 was implemented in the original Eliza program.  Hopefully
@@ -843,8 +848,7 @@ then you can disable it:
 You can also achieve the same effect by making sure
 that the script data does not contain any reassembly rules 
 marked with the keyword "reasm_for_memory".  The default
-script data only has 4 such items. 
-
+script data only has 4 such items.  
 
 =cut
 
@@ -1113,15 +1117,155 @@ sub parse_script_data {
 
 }  # End of method parse_script_data
 
+
+# Eliminate some pesky warnings.
+#
+sub DESTROY {}
+
+
 # ---{ E N D   M E T H O D S }----------------------------------
 ####################################################################
 
 1;  	# Return a true value.  
 
 
+=head1 CHANGES
+
+=over 4
+
+=item * Version 1.01 - January 2002
+
+  Added an empty DESTORY method, to eliminate
+  some pesky warning messages.  Suggested by
+  Stas Bekman. 
+
+=item * Version 0.98 - March 2000
+
+  Some changes to the documentation.
+
+=item * Versions 0.96-0.97 - October 1999
+
+  One tiny change to the regex which implements
+  reassemble rules.  Thanks to Gidon Wise for
+  suggesting this improvement. 
+
+=item * Versions 0.94-0.95 - July 1999
+
+
+  Fixed a bug in the way the bot invokes its random function
+  when it pulls a comment out of memory. 
+
+=item * Version 0.93 - June 1999
+
+  Calling programs can now specify their own random-number generators.  
+  Use this syntax:
+
+	$chatbot = new Chatbot::Eliza;
+	$chatbot->myrand( 
+		sub { 
+			#function goes here! 
+		} 
+	);
+
+  The custom random function should have the same prototype
+  as perl's built-in rand() function.  That is, it should take
+  a single (numeric) expression as a parameter, and it should 
+  return a floating-point value between 0 and that number.  
+
+  You can also now use a reference to an anonymous hash 
+  as a parameter to the new() method to define any fields 
+  in that bot instance:
+
+        $bot = new Chatbot::Eliza {
+                name       => "Brian",
+                scriptfile => "myscript.txt",
+                debug      => 1,
+        };
+
+
+=item * Versions 0.91-0.92 - April 1999
+
+  Fixed some misspellings. 
+
+
+=item * Version 0.90 - April 1999
+
+  Fixed a bug in the way individual bot objects store 
+  their memory.  Thanks to Randal Schwartz and to 
+  Robert Chin for pointing this out.
+
+  Fixed a very stupid error in the way the random
+  function is invoked.  Thanks to Antony Quintal
+  for pointing out the error. 
+
+  Many corrections and improvements were made 
+  to the German script by Matthias Hellmund.  
+  Thanks, Matthias!
+
+  Made a minor syntactical change, at the suggestion
+  of Roy Stephan.
+
+  The memory functionality can now be disabled by setting the
+  $Chatbot::Eliza::memory_on variable to 0, like so:
+
+	$bot->memory_on(0);
+
+  Thanks to Robert Chin for suggesting that. 
+  
+
+
+=item * Version 0.40 - July 1998
+
+  Re-implemented the memory functionality. 
+
+  Cleaned up and expanded the embedded POD documentation.  
+
+  Added a sample script in German.  
+
+  Modified the debugging behavior.  The transform() method itself 
+  will no longer print any debugging output directly to STDOUT.  
+  Instead, all debugging output is stored in a module variable 
+  called "debug_text".  The "debug_text" variable is printed out 
+  by the command_interface() method, if the debug flag is set.   
+  But even if this flag is not set, the variable debug_text 
+  is still available to any calling program.  
+
+  Added a few more example scripts which use the module.  
+
+    simple       - simple script using Eliza.pm
+    simple.cgi   - simple CGI script using Eliza.pm
+    debug.cgi    - CGI script which displays debugging output
+    deutsch      - script using the German script
+    deutsch.cgi  - CGI script using the German script
+    twobots      - script which creates two distinct bots
+
+=item * Version 0.32 - December 1997
+
+  Fixed a bug in the way Eliza loads its default internal script data.
+  (Thanks to Randal Schwartz for pointing this out.) 
+
+  Removed the "memory" functions internal to Eliza.  
+  When I get them working properly I will add them back in. 
+
+  Added one more example program.
+
+  Fixed some minor errors in the embedded POD documentation.
+
+=item * Version 0.31
+
+  The module is now installable, just like any other self-respecting
+  CPAN module.  
+
+=item * Version 0.30
+
+  First release.
+
+=back
+
+
 =head1 AUTHOR
 
-John Nolan  jpnolan@op.net  April 1999.  
+John Nolan  jpnolan@sonic.net  March 2002. 
 
 Implements the classic Eliza algorithm by Prof. Joseph Weizenbaum. 
 Script format devised by Charles Hayden. 
