@@ -157,7 +157,8 @@ fields can be initialized using this syntax:
                 debug      =&gt; 1,
                 prompts_on =&gt; 1,
                 memory_on  =&gt; 0,
-                myrand     =&gt; sub { rand($_[0]); },
+                myrand     =&gt; 
+                        sub { my $N = defined $_[0] ? $_[0] : 1;  rand($N); },
         };
 </PRE>
 <P>

@@ -20,7 +20,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '0.94';
+$VERSION = '0.95';
 sub Version { $VERSION; }
 
 
@@ -115,7 +115,8 @@ Any of the fields can be initialized using this syntax:
 		debug      => 1,
 		prompts_on => 1,
 		memory_on  => 0,
-		myrand     => sub { rand($_[0]); },
+		myrand     => 
+			sub { my $N = defined $_[0] ? $_[0] : 1;  rand($N); },
 	};
 
 If you don't specify a script file, then the
@@ -284,7 +285,8 @@ my %fields = (
 	botprompt	=> '',
 	userprompt	=> '',
 
-	myrand          => sub { return rand($_[0]); },
+	myrand          => 
+			sub { my $N = defined $_[0] ? $_[0] : 1;  rand($N); },
 
 	keyranks	=> undef,
 	decomplist	=> undef,

@@ -1,4 +1,4 @@
-README file for Chatbot::Eliza version 0.94
+README file for Chatbot::Eliza version 0.95
 
 This module implements the classic Eliza algorithm. The original Eliza
 program was written by Joseph Weizenbaum and described in the
@@ -53,8 +53,8 @@ make install
 WHAT'S NEW?         
 
 
-Version 0.94 - July 1999
-------------
+Versions 0.94 & 0.95 - July 1999
+--------------------
 
 Fixed a bug in the way the bot invokes its random function
 when it pulls a comment out of memory. 
