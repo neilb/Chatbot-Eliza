@@ -10,7 +10,7 @@ DESCRIPTION
     the Communications of the ACM in 1967. Eliza is a mock Rogerian
     psychotherapist. It prompts for user input, and uses a simple
     transformation algorithm to change user input into a follow-up
-    question. The program is designed to give the appearance of
+    question. The program is desigend to give the appearance of
     understanding.
 
     This program is a faithful implementation of the program
@@ -19,8 +19,8 @@ DESCRIPTION
     same as Weizenbaum's.
 
     This module encapsulates the Eliza algorithm in the form of an
-    object. This makes the functionality easy to use in larger
-    programs, including CGI programs for the World Wide Web.
+    object. This should make the functionality easy to use in larger
+    programs.
 
 USAGE
     This is all you need to do to launch a simple Eliza session:
@@ -69,17 +69,20 @@ USAGE
 
             my ($harry, $sally, $he_says, $she_says);
 
-            $sally = new Chatbot::Eliza "Harry", "histext.txt";
-            $harry = new Chatbot::Eliza "Sally", "hertext.txt";
+            $sally = new Chatbot::Eliza "Sally", "histext.txt";
+            $harry = new Chatbot::Eliza "Harry", "hertext.txt";
 
             $he_says  = "I am sad.";
 
+            # Seed the random number generator.
+            srand( time ^ ($$ + ($$ << 15)) );      
+
             while (1) {
-                    $she_says = $sally->_transform( $he_says );
-                    print $sally->name, $she_says, "\n";
+                    $she_says = $sally->transform( $he_says );
+                    print $sally->name, ": $she_says \n";
             
-                    $he_says  = $harry->_transform( $she_says );
-                    print $harry->name, $he_says, "\n";
+                    $he_says  = $harry->transform( $she_says );
+                    print $harry->name, ": $he_says \n";
             }
 
 
@@ -132,11 +135,6 @@ MAIN DATA MEMBERS
     hash: words which are found in decomposition rules; values:
     words which are treated just like their corresponding synonyms
     during matching of decomposition rules.
-
-  @memory
-
-    An array of user-input strings which are remembered and may be
-    used at random moments in a dialogue.
 
 METHODS
   my $chatterbot = new Chatbot::Eliza;

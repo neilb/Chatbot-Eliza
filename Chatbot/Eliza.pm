@@ -15,7 +15,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '0.31';
+$VERSION = '0.32';
 sub Version { $VERSION; }
 
 =head1  NAME
@@ -96,17 +96,20 @@ script, and see how they interact:
 
 	my ($harry, $sally, $he_says, $she_says);
 
-	$sally = new Chatbot::Eliza "Harry", "histext.txt";
-	$harry = new Chatbot::Eliza "Sally", "hertext.txt";
+	$sally = new Chatbot::Eliza "Sally", "histext.txt";
+	$harry = new Chatbot::Eliza "Harry", "hertext.txt";
 
 	$he_says  = "I am sad.";
 
+	# Seed the random number generator.
+	srand( time ^ ($$ + ($$ << 15)) );      
+
 	while (1) {
-		$she_says = $sally->_transform( $he_says );
-		print $sally->name, $she_says, "\n";
+		$she_says = $sally->transform( $he_says );
+		print $sally->name, ": $she_says \n";
 	
-		$he_says  = $harry->_transform( $she_says );
-		print $harry->name, $he_says, "\n";
+		$he_says  = $harry->transform( $she_says );
+		print $harry->name, ": $he_says \n";
 	}
 
 Of course, as with the original Eliza program,
@@ -165,13 +168,6 @@ B<values:> words which are treated just like their
 corresponding synonyms during matching of decomposition
 rules. 
 
-=head2 @memory
-
-An array of user-input strings which are 
-remembered and may be used at random moments 
-in a dialogue.  
-
-
 =cut
 
 
@@ -194,8 +190,6 @@ my %fields = (
 	initial		=> undef,
 	final		=> undef,
 	quit		=> undef, 
-
-	memory		=> undef
 );
 
 
@@ -444,17 +438,15 @@ output string, called B<$reasmb>.
 sub transform{
 	my ($self,$string) = @_;
 
-	my ($i, @string_parts, $string_part, $string_to_remember,
+	my ($i, @string_parts, $string_part,
 		$rank, $goto, $reasmb, $keyword, 
 		$decomp, $this_decomp, 
 		$reasmbkey, @these_reasmbs,
-		@details, $synonyms, $synonym_index,
-		$memory);
+		@details, $synonyms, $synonym_index);
 
 	$rank   = -2;
 	$reasmb = "";
 	$goto   = "";
-	$string_to_remember   = "";
 
 	# First run the string through the preprocessor.  
 	$string = $self->preprocess( $string );
@@ -549,7 +541,6 @@ sub transform{
 					# Move on to the next keyword.  If no other keywords match,
 					# then we'll end up actually using the $reasmb string 
 					# we just generated above.
-					$string_to_remember = $string_part;
 					next KEYWORD ;
 
 				}  # End if ($string_part =~ /$this_decomp/i) 
@@ -563,21 +554,6 @@ sub transform{
 	} # End KEYWORD: foreach $keyword (keys %{ $self->{decomplist})
 	
 	} # End STRING_PARTS: foreach $string_part (@string_parts) {
-
-	# If the rank for this keyword match is higher than zero, 
-	# then add the string to the memory. 
-	push @{ $self->{memory} }, $string_to_remember if ($rank > '0');
-
-	if ($self->debug) {
-		foreach $memory (@{ $self->{memory} }) { print $memory , " "; } ;
-		print "\n";
-	}
-
-	# If we haven't found a suitable reassembly rule for this transformation,
-	# then pick out a string from the memory and use that instead. 
-	if ($reasmb eq "" and defined( $string = shift @{ $self->{memory} } ) ) {
-		$reasmb =  "Earlier you mentioned " . $self->postprocess($string) . "."; 
-	}
 
 	# If all else fails, call this method recursively 
 	# and make sure that it has something to parse. 
@@ -680,12 +656,24 @@ sub parse_script_data {
 	my @scriptlines;
 
 	if ($scriptfile) {
+
+		# If we have an external script file, open it 
+		# and read it in (the whole thing, all at once). 
 		open  (SCRIPTFILE, "<$scriptfile") 
 			or die "Could not read from file $scriptfile : $!\n";
-		@scriptlines = <SCRIPTFILE>; # read in the script from external data file
+		@scriptlines = <SCRIPTFILE>; # read in script data 
 		$self->scriptfile($scriptfile);
+		close (SCRIPTFILE);
+
 	} else {
-		@scriptlines = <DATA>;  # read in the script from this file (see __END__ )
+
+		# Otherwise, read in the data from the bottom 
+		# of this file.  This data might be read several
+		# times, so we save the offset pointer and
+		# reset it when we're done.
+		my $where= tell(DATA);
+		@scriptlines = <DATA>;  # read in script data 
+		seek(DATA, $where, 0);
 		$self->scriptfile('');
 	}
 

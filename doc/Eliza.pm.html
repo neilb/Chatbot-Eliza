@@ -29,16 +29,15 @@ of the ACM in 1967.  Eliza is a mock Rogerian
 psychotherapist.  It prompts for user input, 
 and uses a simple transformation algorithm
 to change user input into a follow-up question.  
-The program is designed to give the appearance 
+The program is desigend to give the appearance 
 of understanding.  
 <p>This program is a faithful implementation of the program 
 described by Weizenbaum.  It uses a simplified script 
 language (devised by Charles Hayden).  The content 
 of the script is the same as Weizenbaum's. 
 <p>This module encapsulates the Eliza algorithm 
-in the form of an object.  This makes
-the functionality easy to use in larger programs,
-including CGI programs for the World Wide Web.  
+in the form of an object.  This should make 
+the functionality easy to use in larger programs.  
 <p><p><hr>
 
 <H1> 
@@ -93,18 +92,23 @@ script, and see how they interact:
 <XMP>
         use Chatbot::Eliza
         my ($harry, $sally, $he_says, $she_says);
-        $sally = new Chatbot::Eliza "Harry", "histext.txt";
-        $harry = new Chatbot::Eliza "Sally", "hertext.txt";
+        $sally = new Chatbot::Eliza "Sally", "histext.txt";
+        $harry = new Chatbot::Eliza "Harry", "hertext.txt";
         $he_says  = "I am sad.";
-        while (1) {
-                $she_says = $sally->_transform( $he_says );
-                print $sally->name, $she_says, "\n";
-        
-                $he_says  = $harry->_transform( $she_says );
-                print $harry->name, $he_says, "\n";
-        }
 
 </XMP>
+<PRE>
+        # Seed the random number generator.
+        srand( time ^ ($$ + ($$ &lt;&lt; 15)) );      
+        while (1) {
+                $she_says = $sally->transform( $he_says );
+                print $sally->name, ": $she_says \n";
+        
+                $he_says  = $harry->transform( $she_says );
+                print $harry->name, ": $he_says \n";
+        }
+
+</PRE>
 <p>Of course, as with the original Eliza program,
 the magic of the algorithm is really in the script.
 <p><p><hr>
@@ -154,11 +158,6 @@ replacement words.
 <STRONG>values:</STRONG> words which are treated just like their 
 corresponding synonyms during matching of decomposition
 rules. 
-<p>
-<H2> <STRONG>@memory</STRONG></H2>
-An array of user-input strings which are 
-remembered and may be used at random moments 
-in a dialogue.  
 <p><p><hr>
 
 <H1> 

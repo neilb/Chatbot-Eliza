@@ -1,9 +1,11 @@
 Chatbot/Eliza.pm
 Makefile.PL
 test.pl
-example.pl
-example.cgi
+example1.pl
+example2.cgi
+example3.pl
 doc/Eliza.pm.html
 doc/Eliza.pm.txt
 README
 MANIFEST
+ALPHA

@@ -1,4 +1,4 @@
-README file for Chatbot::Eliza version 0.31
+README file for Chatbot::Eliza version 0.32
 
 This module implements the classic Eliza algorithm. The original Eliza
 program was written by Joseph Weizenbaum and described in the
@@ -51,6 +51,19 @@ make install
 
 
 WHAT'S NEW?         
+
+Version 0.32
+------------
+
+Fixed a bug in the way Eliza loads its default internal script data.
+(Thanks to Randal Schwartz for pointing this out.) 
+
+Removed the "memory" functions internal to Eliza.  
+When I get them working properly I will add them back in. 
+
+Added one more example program.
+
+Fixed some minor errors in the embedded POD documentation.
 
 Version 0.31
 ------------
