@@ -1,5 +1,5 @@
 
-README file for Chatbot::Eliza 1.01 
+README file for Chatbot::Eliza 1.02 
 
 
 NAME
@@ -480,7 +480,11 @@ How the script file is parsed
     %synon, @initial,' and `@final'.
 
 CHANGES
-    * Version 1.01 - January 2002
+    * Version 1.02 - January 2003
+          Added a Norwegian script, kindly contributed by 
+          Mats Stafseng Einarsen.  Thanks Mats!
+
+    * Version 1.01 - January 2003
           Added an empty DESTORY method, to eliminate
           some pesky warning messages.  Suggested by
           Stas Bekman. 
@@ -592,7 +596,7 @@ CHANGES
           First release.
 
 AUTHOR
-    John Nolan jpnolan@sonic.net March 2002.
+    John Nolan jpnolan@sonic.net January 2003.
 
     Implements the classic Eliza algorithm by Prof. Joseph
     Weizenbaum. Script format devised by Charles Hayden.

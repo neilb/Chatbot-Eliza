@@ -2,7 +2,7 @@
 
 package Chatbot::Eliza;
  
-# Copyright (c) 1997-2002 John Nolan. All rights reserved. 
+# Copyright (c) 1997-2003 John Nolan. All rights reserved. 
 # This program is free software.  You may modify and/or 
 # distribute it under the same terms as Perl itself.  
 # This copyright notice must remain attached to the file.  
@@ -20,7 +20,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '1.01';
+$VERSION = '1.02';
 sub Version { $VERSION; }
 
 
@@ -1133,7 +1133,12 @@ sub DESTROY {}
 
 =over 4
 
-=item * Version 1.01 - January 2002
+=item * Version 1.02 - January 2003
+
+  Added a Norwegian script, kindly contributed by 
+  Mats Stafseng Einarsen.  Thanks Mats!
+
+=item * Version 1.01 - January 2003
 
   Added an empty DESTORY method, to eliminate
   some pesky warning messages.  Suggested by
@@ -1265,7 +1270,7 @@ sub DESTROY {}
 
 =head1 AUTHOR
 
-John Nolan  jpnolan@sonic.net  March 2002. 
+John Nolan  jpnolan@sonic.net  January 2003. 
 
 Implements the classic Eliza algorithm by Prof. Joseph Weizenbaum. 
 Script format devised by Charles Hayden. 
