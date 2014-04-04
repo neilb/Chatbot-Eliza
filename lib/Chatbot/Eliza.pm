@@ -20,7 +20,7 @@ use Carp;
 
 use vars qw($VERSION @ISA $AUTOLOAD); 
 
-$VERSION = '1.04';
+$VERSION = '1.04_01';
 sub Version { $VERSION; }
 
 

@@ -1,4 +1,4 @@
-Chatbot/Eliza.pm
+lib/Chatbot/Eliza.pm
 MANIFEST
 Makefile.PL
 README
