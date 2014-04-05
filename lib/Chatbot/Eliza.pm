@@ -1128,6 +1128,12 @@ sub DESTROY {}
 1;  	# Return a true value.  
 
 
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2003 by John Nolan  E<lt>jpnolan@sonic.netE<gt>.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =head1 AUTHOR
 
