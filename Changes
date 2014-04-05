@@ -5,6 +5,7 @@ Revision history for Perl module Chatbot::Eliza
     - Added this Changes file; moved changelog entries from pod to here.
     - Moved all example scripts into examples/ directory
     - Added a minimal test that actually exercises Eliza with a script
+    - Added "use warnings" and dropped use vars in favour of 'our'
     - Switched to Dist::Zilla
 
 1.04 2003-01-24

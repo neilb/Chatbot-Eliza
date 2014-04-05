@@ -14,14 +14,13 @@ package Chatbot::Eliza;
 # POD documentation is distributed throughout the actual code
 # so that it also functions as comments.  
 
-require 5.003; 
+require 5.006; 
 use strict;
+use warnings;
 use Carp;
 
-use vars qw($VERSION @ISA $AUTOLOAD); 
+our $AUTOLOAD;
 
-$VERSION = '1.04_01';
-sub Version { $VERSION; }
 
 
 ####################################################################
