@@ -1,6 +1,6 @@
 Revision history for Perl module Chatbot::Eliza
 
-1.04_01 2014-04-05
+1.05 2014-04-17
     - Moved Chatbot/Eliza.pm to lib/Chatbot/Eliza.pm
     - Added this Changes file; moved changelog entries from pod to here.
     - Moved all example scripts into examples/ directory
@@ -8,6 +8,10 @@ Revision history for Perl module Chatbot::Eliza
     - Added "use warnings" and dropped use vars in favour of 'our'
     - Added COPYRIGHT AND LICENSE section to pod
     - Switched to Dist::Zilla
+
+1.04_01 2014-04-05
+    - All the changes in 1.05 (above) were first done
+      for this developer release.
 
 1.04 2003-01-24
     - Added a Norwegian script, kindly contributed by Mats Stafseng Einarsen.
