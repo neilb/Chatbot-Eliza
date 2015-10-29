@@ -2,6 +2,7 @@ Revision history for Perl module Chatbot::Eliza
 
 1.06 2015-10-29 NEILB
     - Updated github repo URL after changing my github username
+    - Include a META.json in releases, and tag & push to github on release
 
 1.05 2014-04-17
     - Moved Chatbot/Eliza.pm to lib/Chatbot/Eliza.pm
