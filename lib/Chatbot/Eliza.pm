@@ -153,7 +153,7 @@ script, and see how they interact:
 	while (1) {
 		$she_says = $sally->transform( $he_says );
 		print $sally->name, ": $she_says \n";
-	
+
 		$he_says  = $harry->transform( $she_says );
 		print $harry->name, ": $he_says \n";
 	}
