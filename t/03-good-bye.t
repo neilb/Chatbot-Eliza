@@ -50,7 +50,7 @@ sub goodbye_eliza {
 	# reply will always have a value
 	ok($reply);
 	# it could be one of four responses
-	is($FINAL{$reply}, 1, 'eliza said goodbye - $reply');
+	is($FINAL{$reply}, 1, "eliza said goodbye - $reply");
 };
 
 1;
