@@ -498,6 +498,31 @@ sub command_interface {
 
 } # End method command_interface
 
+=head2 interact($string)
+
+    $chatterbot->interact($string);
+
+interact() returns a single interaction with 
+the Eliza object.
+
+=cut
+
+sub interact {
+	my ($self, $user_input) = @_;
+
+	my $reply;
+	# If the user wants to say goodbye,
+	if ($self->_testquit($user_input)) {
+		my $final = $self->{final};
+		$reply = $final->[ int &{$self->{myrand}}( scalar @{ $final } )];
+	}
+	# transform the text
+	else {
+		$reply = $self->transform($user_input);
+	}
+
+	return $reply;
+}
 
 ####################################################################
 # --- preprocess ---
