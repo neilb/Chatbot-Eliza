@@ -514,7 +514,6 @@ sub interact {
 	my $final = $self->{final};
 	
 	# If the user wants to say goodbye,
-	# prints out a farewell message
 	if ($self->_testquit($user_input)) {
 		$reply = $final->[ int &{$self->{myrand}}( scalar @{ $final } )];
 	}
