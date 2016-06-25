@@ -543,7 +543,7 @@ It uses the array C<%pre>, which is created
 during the parse of the script.
 
 =cut
-use Data::Dumper;
+
 sub preprocess {
 	my ($self,$string) = @_;
 

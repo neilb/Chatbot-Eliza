@@ -26,24 +26,24 @@ subtest 'say goodbye in multiple ways' => sub {
 	    expected => 'hello',			
     });
 	goodbye_eliza({
-		text => 'hello world',			
-	    expected => 'hello world',			
+		text => 'hello recolect',			
+	    expected => 'hello recollect',			
     });
 	goodbye_eliza({
 		text => 'eliza goodbye',			
 	    expected => 'eliza goodbye',			
     });
 	goodbye_eliza({
-		text => 'done something',			
-	    expected => 'done something',			
+		text => 'done certainle',			
+	    expected => 'done certainly',			
     });
 	goodbye_eliza({
 		text => 'maybr',			
 	    expected => 'maybe',			
     });
 	goodbye_eliza({
-		text => 'quiting',
-        expected => 'quiting',			
+		text => 'machynes',
+        expected => 'machines',			
 	});
 };
 
@@ -55,8 +55,7 @@ sub goodbye_eliza {
 	my $reply = $bot->preprocess($args->{text});
 	# reply will always have a value
 	ok($reply);
-	# it could be one of four responses
-	is($reply, $args->{expected}, "eliza said goodbye - $reply");
+	is($reply, $args->{expected}, "we went through preprocess - $reply");
 };
 
 1;
