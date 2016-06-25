@@ -543,7 +543,7 @@ It uses the array C<%pre>, which is created
 during the parse of the script.
 
 =cut
-
+use Data::Dumper;
 sub preprocess {
 	my ($self,$string) = @_;
 
@@ -552,10 +552,10 @@ sub preprocess {
 	@wordsout = @wordsin = split / /, $string;
 
 	WORD: for ($i = 0; $i < @wordsin; $i++) {
-		foreach $keyword (keys %{ $self->{pre} }) {
+        foreach $keyword (keys %{ $self->{pre} }) {
 			if ($wordsin[$i] =~ /\b$keyword\b/i ) {
 				($wordsout[$i] = $wordsin[$i]) =~ s/$keyword/$self->{pre}->{$keyword}/ig;
-				next WORD;
+                next WORD;
 			}
 		}
 	}
