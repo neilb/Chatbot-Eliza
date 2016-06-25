@@ -22,8 +22,8 @@ my $bot = new Chatbot::Eliza {
 
 subtest 'say goodbye in multiple ways' => sub {
 	goodbye_eliza({
-		text => 'hello',			
-	    expected => 'hello',			
+		text => 'hello world',			
+	    expected => 'hello world',			
     });
 	goodbye_eliza({
 		text => 'hello recolect',			
