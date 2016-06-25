@@ -640,16 +640,14 @@ sub _debug_memory {
 
 	my ($self) = @_;
 
-	my $string = "\t";           
+	my $string = "";           
 	$string .= $#{ $self->memory } + 1;
 	$string .= " item(s) in memory stack:\n";
 
 	# [THANKS to Roy Stephan for helping me adjust this bit]
-	#
-	foreach (@{ $self->memory } ) { 
-
-		my $line = $_; 
-		$string .= sprintf "\t\t->$line\n" ;
+	# Roy can't write perl
+	foreach my $line (@{ $self->memory } ) { 
+        $string .= sprintf "\t\t->$line\n";
 	};
 
 	return $string;
