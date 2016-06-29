@@ -5,57 +5,52 @@ use warnings;
 use Chatbot::Eliza;
 use Test::More 0.88;
 use feature 'say';
+use Array::Utils qw(array_diff);
 
-my %FINAL = (
-	q{Goodbye.  It was nice talking to you.} => 1, 
-	q{Goodbye.  I hope you found this session helpful.} => 1, 
-	q{I think you should talk to a REAL analyst.  Ciao! } => 1, 
-	q{Life is tough.  Hang in there!} => 1,
-);
-
+BEGIN {
+	use_ok( 'Chatbot::Eliza::Option' ) || print "Bail out!\n";
+    use_ok( 'Chatbot::Eliza::Brain' ) || print "Bail out!\n";
+}
 # doesn't store memory so it's actually pretty useless
-my $bot = new Chatbot::Eliza {
-	name => "Eliza",
-	memory_on => 0,
-	prompts_on => 1,
-};
 
 subtest 'say goodbye in multiple ways' => sub {
-	goodbye_eliza({
-		text => 'hello world',			
-	    expected => 'hello world',			
+	test_preprocess({
+		text => 'hello world!',			
+	    expected => ['hello world'],			
     });
-	goodbye_eliza({
-		text => 'hello recolect',			
-	    expected => 'hello recollect',			
+	test_preprocess({
+		text => 'hello recollect?',			
+	    expected => ['hello recollect'],			
     });
-	goodbye_eliza({
-		text => 'eliza goodbye',			
-	    expected => 'eliza goodbye',			
+	test_preprocess({
+		text => 'eliza but goodbye',			
+	    expected => ['eliza ', ' goodbye'],			
     });
-	goodbye_eliza({
-		text => 'done certainle',			
-	    expected => 'done certainly',			
+	test_preprocess({
+		text => 'done certainly,',			
+	    expected => ['done certainly'],			
     });
-	goodbye_eliza({
-		text => 'maybr',			
-	    expected => 'maybe',			
+	test_preprocess({
+		text => 'sometext ? which ! is , everything',			
+	    expected => ['sometext ', ' which ', ' is ', ' everything'],			
     });
-	goodbye_eliza({
-		text => 'machynes',
-        expected => 'machines',			
-	});
 };
 
 done_testing();
 
-sub goodbye_eliza {
+sub test_preprocess {
 	my $args = shift;
-	
-	my $reply = $bot->preprocess($args->{text});
+
+    my $options = Chatbot::Eliza::Option->new();
+    my $eliza = Chatbot::Eliza::Brain->new(options => $options);
+	my @reply = $eliza->preprocess($args->{text});
 	# reply will always have a value
-	ok($reply);
-	is($reply, $args->{expected}, "we went through preprocess - $reply");
+	ok(@reply);
+    if ( !array_diff(@reply, $args->{expected}->@*) ) {
+        pass("We went through preprocess $args->{expected}");
+    } else {
+        fail("Our arrays do not match $args->{expected}");
+    }
 };
 
 1;

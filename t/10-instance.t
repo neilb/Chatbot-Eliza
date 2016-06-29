@@ -14,22 +14,16 @@ BEGIN {
 
 subtest 'test_quit' => sub {
 	test_quit({
-		text => 'goodbye',			
+		text => 'I feel happy',
+        expected => 'Do you often feel happy?'
 	});
 	test_quit({
-		text => 'bye eliza',			
+		text => 'I like blueberries',
+        expected => 'I like blueberries too!',
 	});
 	test_quit({
-		text => 'eliza goodbye',			
-	});
-	test_quit({
-		text => 'done',			
-	});
-	test_quit({
-		text => 'exit',			
-	});
-	test_quit({
-		text => 'quit',			
+		text => 'xyzzy',
+        expected => 'Huh?'
 	});
 };
 
@@ -38,11 +32,10 @@ done_testing();
 sub test_quit {
 	my $args = shift;
 
-    my $options = Chatbot::Eliza::Option->new();
-    my $eliza = Chatbot::Eliza::Brain->new(options => $options);
-	my $reply = $eliza->_test_quit($args->{text});
+    my $eliza = Chatbot::Eliza->new(script_file => 't/test-script.txt');
+    ok(my $reply = $eliza->instance($args->{text}));
 	# reply will always have a value
-	is($reply, 1, "test quit success");
+	is($reply, $args->{expected}, "transform some text expecting $args->{expected}");
 };
 
 1;
