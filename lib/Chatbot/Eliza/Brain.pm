@@ -25,7 +25,7 @@ has 'decomp_matches' => (
 
 sub preprocess ($self, $string) {
     my @orig_words = split / /, $string;
-    use Data::Dumper;
+    
     my @converted_words;
     foreach my $word ( @orig_words ) {
         #TODO: add some kind of spell check against unique words
