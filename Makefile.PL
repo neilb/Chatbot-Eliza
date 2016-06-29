@@ -4,7 +4,7 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME             => 'Chatbot::Eliza2',
+    NAME             => 'Chatbot::Eliza',
     AUTHOR           => q{Lnation <thisusedtobeanemail@gmail.com>},
     VERSION_FROM     => 'lib/Chatbot/Eliza2.pm',
     ABSTRACT_FROM    => 'lib/Chatbot/Eliza2.pm',

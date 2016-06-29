@@ -1,5 +1,8 @@
 Changes
-lib/Chatbot/Eliza2.pm
+lib/Chatbot/Eliza.pm
+lib/Chatbot/Eliza/Brain.pm
+lib/Chatbot/Eliza/Option.pm
+lib/Chatbot/Eliza/ScriptParser.pm
 Makefile.PL
 MANIFEST			This list of files
 README
@@ -7,3 +10,14 @@ t/00-load.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
+t/01-options.t
+t/02-base_me.t
+t/03-script-parser.t
+t/04-preprocess.t
+t/05-unique_words.t
+t/06-test-quit.t
+t/07-postprocess.t
+t/08-debug_memory.t
+t/09-transform.t
+t/10-instance.t
+t/11-instance-bye.t
