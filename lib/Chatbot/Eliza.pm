@@ -765,10 +765,10 @@ sub transform{
 
 					# Get the list of possible reassembly rules for this key. 
 					#
-                    my $memory = (defined $use_memory and $#{ $self->{reasmblist_for_memory}->{$reasmbkey} } >= 0);
+					my $memory = (defined $use_memory and $#{ $self->{reasmblist_for_memory}->{$reasmbkey} } >= 0);
 
-                    # Pick out next reassembly rule.
-                    $reasmb = $self->_get_next_reasmb( $reasmbkey, $memory);
+					# Pick out next reassembly rule.
+					$reasmb = $self->_get_next_reasmb( $reasmbkey, $memory);
 
 					$self->debug_text($self->debug_text . sprintf "\t\t-->  $reasmb\n");
 
@@ -904,17 +904,17 @@ script data only has 4 such items.
 # next reasmb in the list, wrapping back to the start if the last one
 # is reached.
 sub _get_next_reasmb {
-    my ( $self, $reasmbkey, $memory ) = @_;
+	my ( $self, $reasmbkey, $memory ) = @_;
 
-    my $for_memory = $memory ? '_for_memory' : '';
-    my @these_reasmbs = @{ $self->{"reasmblist$for_memory"}->{$reasmbkey} };
-    my $next_reasmb = $self->{"next_reasmblist$for_memory"}->{$reasmbkey}++;
-    if ( $next_reasmb > scalar( @these_reasmbs ) ) {
-        $next_reasmb = 1;
-        $self->{"next_reasmblist$for_memory"}->{$reasmbkey} = 0;
-    }
+	my $for_memory = $memory ? '_for_memory' : '';
+	my @these_reasmbs = @{ $self->{"reasmblist$for_memory"}->{$reasmbkey} };
+	my $next_reasmb = $self->{"next_reasmblist$for_memory"}->{$reasmbkey}++;
+	if ( $next_reasmb > scalar( @these_reasmbs ) ) {
+		$next_reasmb = 1;
+		$self->{"next_reasmblist$for_memory"}->{$reasmbkey} = 0;
+	}
 
-    return $these_reasmbs[$next_reasmb - 1];
+	return $these_reasmbs[$next_reasmb - 1];
 }
 
 ####################################################################
