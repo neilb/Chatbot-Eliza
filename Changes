@@ -1,5 +1,9 @@
 Revision history for Perl module Chatbot::Eliza
 
+1.07 2017-04-08 GRANTG
+    - Implemented RT https://rt.cpan.org/Ticket/Display.html?id=120590 to
+      return reasmbs in order
+
 1.06 2015-10-29 NEILB
     - Updated github repo URL after changing my github username
     - Include a META.json in releases, and tag & push to github on release
