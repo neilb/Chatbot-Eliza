@@ -765,22 +765,10 @@ sub transform{
 
 					# Get the list of possible reassembly rules for this key. 
 					#
-					if (defined $use_memory and $#{ $self->{reasmblist_for_memory}->{$reasmbkey} } >= 0) {
+                    my $memory = (defined $use_memory and $#{ $self->{reasmblist_for_memory}->{$reasmbkey} } >= 0);
 
-						# If this transform function was invoked with the memory flag, 
-						# and there are in fact reassembly rules which are appropriate
-						# for pulling out of memory, then include them.  
-						@these_reasmbs = @{ $self->{reasmblist_for_memory}->{$reasmbkey} }
-
-					} else {
-
-						# Otherwise, just use the plain reassembly rules.
-						# (This is what normally happens.)
-						@these_reasmbs = @{ $self->{reasmblist}->{$reasmbkey} }
-					}
-
-					# Pick out a reassembly rule at random. 
-					$reasmb = $these_reasmbs[ int &{$self->{myrand}}( scalar @these_reasmbs ) ];
+                    # Pick out next reassembly rule.
+                    $reasmb = $self->_get_next_reasmb( $reasmbkey, $memory);
 
 					$self->debug_text($self->debug_text . sprintf "\t\t-->  $reasmb\n");
 
@@ -909,6 +897,25 @@ script data only has 4 such items.
 	return $reasmb ;
 }
 
+# _get_next_reasmb( $key, $memory_flag )
+#
+# Given a key to a reasmb list and a flag indicating whether the list should
+# be pulled from a memory list or standard script list, returns the
+# next reasmb in the list, wrapping back to the start if the last one
+# is reached.
+sub _get_next_reasmb {
+    my ( $self, $reasmbkey, $memory ) = @_;
+
+    my $for_memory = $memory ? '_for_memory' : '';
+    my @these_reasmbs = @{ $self->{"reasmblist$for_memory"}->{$reasmbkey} };
+    my $next_reasmb = $self->{"next_reasmblist$for_memory"}->{$reasmbkey}++;
+    if ( $next_reasmb > scalar( @these_reasmbs ) ) {
+        $next_reasmb = 1;
+        $self->{"next_reasmblist$for_memory"}->{$reasmbkey} = 0;
+    }
+
+    return $these_reasmbs[$next_reasmb - 1];
+}
 
 ####################################################################
 # --- parse_script_data ---
