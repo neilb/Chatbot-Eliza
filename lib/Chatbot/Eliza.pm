@@ -638,9 +638,9 @@ sub _debug_memory {
     $reply = $chatterbot->transform( $string, $use_memory );
 
 transform() applies transformation rules to the user input
-string.  It invokes preprocess(), does transformations, 
-then invokes postprocess().  It returns the tranformed 
-output string, called C<$reasmb>.  
+string.  It invokes preprocess(), does transformations,
+then invokes postprocess().  It returns the transformed
+output string, called C<$reasmb>.
 
 The algorithm embedded in the transform() method has three main parts:
 
