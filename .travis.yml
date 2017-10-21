@@ -1,0 +1,3 @@
+language: perl
+install: cpanm Dist::Zilla && dzil authordeps --missing | cpanm
+script: dzil test
